@@ -1,8 +1,8 @@
-# www.babouins.fr
+# 🌐 Accueil www.babouins.fr
 
-Site vitrine et point d'entrée du projet **Babouins** : la doc du BTS SIO, écrite par ses étudiants.
+Bienvenue sur le dépôt de [www.babouins.fr](https://www.babouins.fr), la vitrine et le point d'entrée du projet **Babouins** : la doc du BTS SIO, écrite par ses étudiants.
 
-Babouins est une plateforme collaborative où les étudiants de BTS SIO centralisent les procédures, commandes et tutos vus en cours.
+> 🐒 Ce README reprend la trame de [celui du projet d'origine](https://github.com/BABOUINS-PROJECT/babouins.fr), écrit par Dimitri Chassignol en 2024. À l'époque, la page d'accueil était encore "en cours de construction" et le README décrivait le but final. Ce dépôt, c'est ce but final, repris en 2026.
 
 | Où ? | Quoi ? |
 | --- | --- |
@@ -11,9 +11,69 @@ Babouins est une plateforme collaborative où les étudiants de BTS SIO centrali
 | [docs.babouins.fr/admin](https://docs.babouins.fr/admin) | L'éditeur en ligne de la doc : écrire une page sans connaître Git |
 | [GitHub Discussions](https://github.com/Projet-Babouins/www.babouins.fr/discussions) | Les échanges entre contributeurs |
 
-Projet repris par la promo BTS SIO 2026-2028 (Olivier Dutoit). Projet original créé en 2024 par Dimitri Chassignol, Jordan Digat et Mathis Norel. Les deux équipes viennent du même centre de formation : le CFAI LDA de Saint-Étienne.
+### 📚 Concept du projet
 
-## Lancer le site en local
+**Babouins** est une plateforme collaborative où chaque étudiant de BTS SIO peut participer. On y centralise les procédures, les commandes et les tutos vus en cours, on les relit ensemble, et on les garde à jour. Le BTS SIO est dense : l'idée est d'avoir un seul endroit où chercher, accessible à toute la classe.
+
+### 🛠️ Tutoriel sur les pull requests
+
+Un guide pas à pas est en ligne : [www.babouins.fr/contribuer](https://www.babouins.fr/contribuer/). Il explique comment proposer une modification, comment la faire relire, et comment travailler à plusieurs sans se marcher dessus. Jamais touché à Git ? Le guide part de zéro.
+
+### 💻 Contribution à la documentation
+
+Les procédures et les tutos ne sont pas dans ce dépôt : ils vivent sur [docs.babouins.fr](https://docs.babouins.fr). Deux façons d'écrire, à égalité :
+
+- **l'éditeur en ligne**, sans rien installer : [docs.babouins.fr/admin](https://docs.babouins.fr/admin) ;
+- **Git et GitHub**, pour pratiquer les outils du métier : [le dépôt de la doc](https://github.com/Projet-Babouins/docs.babouins.fr).
+
+### 🏠 Nous pouvons même modifier la page d'accueil ?
+
+Oui, tout à fait ! Ce site passe lui aussi par des pull requests. **www.babouins.fr est ton site** : une faute, une phrase pas claire, une idée pour l'accueil ? Propose ta modification. La page d'accueil tient dans un seul fichier, `src/pages/index.astro`.
+
+## 📝 Contribution
+
+Pour contribuer à ce site :
+
+1. **Forke** le dépôt (bouton "Fork" en haut à droite).
+
+> Un **fork** est une copie du dépôt sur ton propre compte GitHub. Tu peux y travailler sans risque : l'original n'est pas touché. Quand ta modification est prête, tu demandes à l'intégrer au projet principal avec une pull request.
+
+2. **Clone** ton fork sur ta machine :
+    ```bash
+    git clone https://github.com/<ton-pseudo>/www.babouins.fr.git
+    ```
+3. **Crée** une nouvelle branche pour ta modification :
+    ```bash
+    git checkout -b <branche>
+    ```
+4. **Fais** ta modification, vérifie que le site se construit, puis **commite** :
+    ```bash
+    npm run build
+    git add .
+    git commit -m "Décris ta modification en une phrase"
+    ```
+5. **Pousse** vers ton fork :
+    ```bash
+    git push -u origin <branche>
+    ```
+6. **Ouvre** une pull request vers le dépôt principal.
+
+Pas envie d'installer quoi que ce soit ? Ouvre le fichier sur GitHub, clique sur le crayon, et GitHub crée le fork et la pull request pour toi. La version courte est dans [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## ✅ Validation des contributions
+
+Toute contribution doit être validée par **au moins deux personnes de la classe** : la règle date du projet d'origine, en 2024. Les pull requests sont relues et testées avant d'être fusionnées. Utilise les commentaires de la pull request pour suggérer des améliorations, et [GitHub Discussions](https://github.com/Projet-Babouins/www.babouins.fr/discussions) pour les questions.
+
+> ⚠️ Règle d'or : **aucune information venant d'une entreprise d'alternance** (adresses IP, noms de domaines internes, identifiants, captures d'écran non anonymisées). Git garde tout dans son historique.
+
+## 📦 Déploiement
+
+Une fois la pull request validée et fusionnée dans `main`, le site se met en ligne tout seul grâce au pipeline CI/CD (GitHub Actions, puis GitHub Pages) :
+
+- `.github/workflows/check.yml` vérifie que le site se construit, sur chaque pull request ;
+- `.github/workflows/deploy.yml` publie le site à chaque merge sur `main`.
+
+## 🚀 Lancer le site en local
 
 Il te faut [Node.js](https://nodejs.org) en version LTS (22.12 ou plus récent).
 
@@ -31,7 +91,7 @@ Le site est visible sur `http://localhost:4321` et se recharge à chaque fichier
 | `npm run build` | Construit le site final dans `dist/` (à lancer avant chaque PR) |
 | `npm run preview` | Affiche le résultat du build, tel qu'il sera en ligne |
 
-## Structure du projet
+## 🗂️ Structure du projet
 
 Le site est fait avec [Astro](https://astro.build) : du HTML, du CSS, et presque pas de JavaScript.
 
@@ -78,7 +138,7 @@ Quelques repères pour débuter :
 - **Ajouter une page** : crée un fichier `.astro` ou `.md` dans `src/pages/`, en t'inspirant d'une page existante.
 - Pas de tiret long dans les textes du site : on utilise des deux-points, des virgules ou des parenthèses.
 
-### Les règles de design de l'accueil
+### 🎨 Les règles de design de l'accueil
 
 Pour que le site ne ressemble pas à un modèle tout fait, la page d'accueil suit quelques règles simples :
 
@@ -90,7 +150,7 @@ Pour que le site ne ressemble pas à un modèle tout fait, la page d'accueil sui
 - **Un texte précis et honnête** : des chiffres vérifiables, et une section qui dit clairement jusqu'où va le projet.
 - **Sobre** : une seule couleur d'accent, des filets fins, pas d'ombres ni d'éléments penchés.
 
-### Refaire la capture de la doc
+### 📸 Refaire la capture de la doc
 
 Les deux images `src/assets/docs-clair.png` et `src/assets/docs-sombre.png` sont des captures d'une page de docs.babouins.fr, une par thème. Pour les refaire :
 
@@ -98,17 +158,14 @@ Les deux images `src/assets/docs-clair.png` et `src/assets/docs-sombre.png` sont
 2. Fais une capture en thème clair, une en thème sombre, et remplace les deux fichiers en gardant les mêmes noms.
 3. Vérifie que la page capturée ne contient **aucune information d'entreprise** : les captures actuelles utilisent des pages de démonstration et la plage d'adresses `192.0.2.0/24`, réservée à la documentation.
 
-## Contribuer
-
-Ce site est ouvert aux pull requests. Chaque PR doit être validée par au moins 2 membres de la classe, et le site se déploie automatiquement à chaque merge sur `main`.
-
-Le guide complet est sur [www.babouins.fr/contribuer](https://www.babouins.fr/contribuer/), et sa version courte dans [CONTRIBUTING.md](CONTRIBUTING.md).
-
-Règle d'or : **aucune information venant d'une entreprise d'alternance** (IP, noms de domaines internes, identifiants, captures non anonymisées).
-
-## Licences
+## 📄 Licences
 
 - Code : [MIT](LICENSE), copyright Projet Babouins et contributeurs.
 - Contenu (textes) : [CC BY-SA 4.0](LICENSE-content).
 
 En contribuant, vous acceptez que votre contenu soit publié sous CC BY-SA 4.0.
+
+---
+
+<br>
+Créé avec ❤️ en 2024 par Dimitri Chassignol, Jordan Digat et Mathis Norel. Repris avec ❤️ en 2026 par la promo BTS SIO 2026-2028 (Olivier Dutoit). Les deux équipes viennent du même centre de formation : le CFAI LDA de Saint-Étienne.
