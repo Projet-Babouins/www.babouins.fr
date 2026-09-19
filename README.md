@@ -68,10 +68,17 @@ Toute contribution doit être validée par **au moins deux personnes de la class
 
 ## 📦 Déploiement
 
-Une fois la pull request validée et fusionnée dans `main`, le site se met en ligne tout seul grâce au pipeline CI/CD (GitHub Actions, puis GitHub Pages) :
+Sur chaque pull request, `.github/workflows/check.yml` vérifie que le site se construit (GitHub Actions). Une fois la pull request validée et fusionnée dans `main`, le site est mis à jour sur son serveur.
 
-- `.github/workflows/check.yml` vérifie que le site se construit, sur chaque pull request ;
-- `.github/workflows/deploy.yml` publie le site à chaque merge sur `main`.
+Le site est hébergé sur un serveur Node.js (panel [Pelican](https://pelican.dev)), comme docs.babouins.fr. Les pages sont statiques, fabriquées au build : l'adaptateur `@astrojs/node` ajoute seulement le petit serveur qui les distribue. Sur le serveur, la mise à jour tient en trois commandes, après avoir récupéré `main` :
+
+```bash
+npm ci
+npm run build
+npm start
+```
+
+`npm start` lance `node ./dist/server/entry.mjs`. Le serveur lit deux variables d'environnement : `HOST` (mettre `0.0.0.0` pour être joignable depuis l'extérieur) et `PORT` (le port attribué par Pelican). Le HTTPS et le nom de domaine sont gérés par le reverse proxy placé devant.
 
 ## 🚀 Lancer le site en local
 
@@ -89,6 +96,7 @@ Le site est visible sur `http://localhost:4321` et se recharge à chaque fichier
 | `npm install` | Installe les dépendances (à faire une fois, après le clone) |
 | `npm run dev` | Lance le site en local, avec rechargement automatique |
 | `npm run build` | Construit le site final dans `dist/` (à lancer avant chaque PR) |
+| `npm start` | Lance le serveur de production, après un build (c'est ce que fait l'hébergement) |
 | `npm run preview` | Affiche le résultat du build, tel qu'il sera en ligne |
 
 ## 🗂️ Structure du projet
@@ -99,10 +107,8 @@ Le site est fait avec [Astro](https://astro.build) : du HTML, du CSS, et presque
 .
 ├── .github/              Réglages GitHub : modèles d'issue et de PR, workflows, CODEOWNERS
 │   └── workflows/
-│       ├── check.yml     Vérifie que le site se construit, sur chaque PR
-│       └── deploy.yml    Met le site en ligne à chaque merge sur main
+│       └── check.yml     Vérifie que le site se construit, sur chaque PR
 ├── public/               Fichiers copiés tels quels dans le site
-│   ├── CNAME             Nom de domaine utilisé par GitHub Pages
 │   ├── favicon.png       Logo du site et icône de l'onglet
 │   └── robots.txt        Indications pour les moteurs de recherche
 ├── src/

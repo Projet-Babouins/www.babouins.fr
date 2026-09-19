@@ -1,11 +1,17 @@
 // Configuration d'Astro : https://docs.astro.build/en/reference/configuration-reference/
 import { defineConfig, fontProviders } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import node from '@astrojs/node';
 
 export default defineConfig({
   // Adresse publique du site (sert au sitemap, aux liens canoniques et à Open Graph).
-  // Pas d'option `base` : le site est servi à la racine du domaine personnalisé.
+  // Pas d'option `base` : le site est servi à la racine du domaine.
   site: 'https://www.babouins.fr',
+
+  // Le site est hébergé sur un serveur Node.js. Toutes les pages restent statiques
+  // (fabriquées au build) : l'adaptateur ajoute seulement le petit serveur qui les distribue,
+  // lancé avec `npm start`. Même principe que docs.babouins.fr.
+  adapter: node({ mode: 'standalone' }),
 
   // Génère sitemap-index.xml à chaque build.
   integrations: [sitemap()],
