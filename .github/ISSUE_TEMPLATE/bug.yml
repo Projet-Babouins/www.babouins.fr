@@ -1,0 +1,56 @@
+name: Signaler un bug
+description: Un lien cassé, un affichage bizarre, une erreur sur le site vitrine
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci pour ton signalement ! Plus il est précis, plus le bug sera corrigé vite.
+  - type: input
+    id: page
+    attributes:
+      label: Page concernée
+      placeholder: "Exemple : https://www.babouins.fr/contribuer"
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Que se passe-t-il ?
+      description: Décris le problème, et comment le reproduire.
+    validations:
+      required: true
+  - type: textarea
+    id: attendu
+    attributes:
+      label: Que devrait-il se passer ?
+    validations:
+      required: true
+  - type: dropdown
+    id: appareil
+    attributes:
+      label: Appareil
+      options:
+        - Ordinateur
+        - Téléphone
+        - Tablette
+    validations:
+      required: true
+  - type: input
+    id: navigateur
+    attributes:
+      label: Navigateur
+      placeholder: "Exemple : Firefox 142"
+  - type: textarea
+    id: captures
+    attributes:
+      label: Captures d'écran
+      description: Optionnel. Pense à masquer toute info sensible.
+  - type: checkboxes
+    id: securite
+    attributes:
+      label: Sécurité
+      options:
+        - label: Mon message et mes captures ne contiennent aucune info sensible (IP, domaines internes, identifiants)
+          required: true

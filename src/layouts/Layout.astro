@@ -1,0 +1,91 @@
+---
+// Layout unique du site : <head>, header, contenu de la page, footer.
+//
+// Depuis une page .astro :   <Layout title="..." description="...">contenu</Layout>
+// Depuis une page Markdown : ajouter dans l'en-tête du fichier
+//                            layout: ../layouts/Layout.astro  (avec title et description)
+import '../styles/global.css';
+import { Font } from 'astro:assets';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE } from '../config';
+
+interface Props {
+  title?: string;
+  description?: string;
+  // `true` pour demander aux moteurs de recherche d'ignorer la page (ex. : la 404).
+  noindex?: boolean;
+  // Rempli automatiquement par Astro pour les pages Markdown.
+  frontmatter?: { title?: string; description?: string };
+}
+
+const { frontmatter, noindex = false } = Astro.props;
+const title = frontmatter?.title ?? Astro.props.title;
+const description = frontmatter?.description ?? Astro.props.description ?? SITE.description;
+
+const pageTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} : ${SITE.tagline}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const socialImage = SITE.socialImage ? new URL(SITE.socialImage, Astro.site) : undefined;
+---
+
+<!doctype html>
+<html lang={SITE.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/png" href={SITE.logo} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="generator" content={Astro.generator} />
+    <!-- Police des titres (déclarée dans astro.config.mjs). -->
+    <Font cssVariable="--font-bricolage" preload />
+    {noindex && <meta name="robots" content="noindex" />}
+
+    <!-- Open Graph : aperçu du lien quand il est partagé (Discord, LinkedIn...). -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {socialImage && <meta property="og:image" content={socialImage} />}
+    <meta name="twitter:card" content={socialImage ? 'summary_large_image' : 'summary'} />
+
+    <!-- Avant l'affichage : signale que JavaScript est actif et réapplique le thème choisi (évite un flash). -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      try {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch {}
+    </script>
+  </head>
+
+  <body>
+    <a href="#contenu" class="skip-link">Aller au contenu</a>
+
+    <!-- Conteneur racine : c'est lui qui coupe ce qui dépasse sur les côtés (voir .page dans global.css). -->
+    <div class="page">
+    <Header />
+
+    <main id="contenu">
+      {
+        frontmatter ? (
+          <article class="prose">
+            <h1>{title}</h1>
+            {frontmatter.description && <p class="lead">{frontmatter.description}</p>}
+            <slot />
+          </article>
+        ) : (
+          <slot />
+        )
+      }
+    </main>
+
+    <Footer />
+    </div>
+  </body>
+</html>

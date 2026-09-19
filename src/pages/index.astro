@@ -1,0 +1,503 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
+import Card from '../components/Card.astro';
+import Motif from '../components/Motif.astro';
+import { CREDITS, CREDITS_NOTICE, LINKS, SITE } from '../config';
+import docsLight from '../assets/docs-clair.png';
+import docsDark from '../assets/docs-sombre.png';
+
+// Largeur affichée de la capture du hero : une colonne sur grand écran, tout l'écran sinon.
+const shotSizes = '(min-width: 60rem) 34rem, 100vw';
+
+// Preuves réelles : ce que cette page montre est lu dans les vrais fichiers du dépôt,
+// au moment du build ("?raw" = le texte brut du fichier). Si le guide change,
+// la page suit toute seule. Rien n'est inventé pour faire joli.
+import guide from './contribuer.md?raw';
+import pageSource from './index.astro?raw';
+
+// Les commandes Git du guide de contribution : les lignes qui commencent par "git".
+const gitCommands = guide
+  .split('\n')
+  .map((line) => line.trim())
+  .filter((line) => line.startsWith('git '));
+
+// Le nombre de lignes du fichier que tu es en train de lire.
+const pageLineCount = pageSource.trimEnd().split('\n').length;
+---
+
+<Layout>
+  <!--
+    Chaque section de cette page a volontairement une forme différente
+    (deux colonnes inégales, colonne étroite, grand panneau, bande pleine largeur, carte décalée...).
+    Si tu ajoutes une section, évite de recopier la forme de sa voisine.
+  -->
+
+  <!-- 1. Hero : deux colonnes inégales. D'abord lire la doc (texte + vraie capture), ensuite contribuer. -->
+  <section class="hero has-motif">
+    <Motif name="main" size="30rem" top="-5rem" right="-7rem" rotate={-24} />
+    <Motif name="piste" size="72rem" bottom="-3rem" left="-12rem" rotate={-4} />
+
+    <div class="container hero-inner">
+      <div>
+        <h1>{SITE.name}</h1>
+        <p class="tagline">{SITE.tagline}</p>
+        <p class="pitch">
+          Procédures, commandes et aide-mémoire, rangés par thème et lisibles sans compte. Une page manque ou contient une erreur ? Tu peux l'écrire ou la corriger, depuis l'éditeur en ligne ou avec Git.
+        </p>
+        <div class="button-row">
+          <Button href={LINKS.docs}>Lire la documentation</Button>
+          <Button href="/contribuer/" variant="secondary">Contribuer</Button>
+        </div>
+      </div>
+
+      <!-- Une vraie capture de la doc, une par thème. Pour la refaire : voir le README. -->
+      <figure class="shot">
+        <a href={LINKS.docs} aria-label="Ouvrir la documentation : docs.babouins.fr">
+          <Image class="shot-light" src={docsLight} alt="" widths={[440, 880, 1760]} sizes={shotSizes} />
+          <Image class="shot-dark" src={docsDark} alt="" widths={[440, 880, 1760]} sizes={shotSizes} />
+        </a>
+        <figcaption>
+          Capture de docs.babouins.fr, avec des pages de démonstration. La documentation se range par thème : réseaux, systèmes, développement.
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 2. Le concept : une colonne étroite, calée à gauche, sans grille. -->
+  <section class="concept" aria-labelledby="concept">
+    <div class="container">
+      <div class="concept-inner">
+        <h2 id="concept">Le concept</h2>
+        <ul class="ledger">
+          <li class="reveal">
+            <Card title="Centraliser" layout="row">
+              <p>Procédures, commandes et tutos vus en cours, réunis sur docs.babouins.fr. Un seul endroit où chercher, accessible à toute la classe : c'était déjà l'idée du projet d'origine, en {CREDITS.foundedIn}.</p>
+            </Card>
+          </li>
+          <li class="reveal">
+            <Card title="Collaborer" layout="row">
+              <p>Chacun peut écrire, corriger ou compléter une page, sans demander la permission. La relecture par 2 autres membres de la classe vient ensuite, pas avant.</p>
+            </Card>
+          </li>
+          <li class="reveal">
+            <Card title="Apprendre les outils pros" layout="row">
+              <p>Git, pull requests, revue de code, CI/CD : tout le projet peut aussi se pratiquer avec les outils utilisés en entreprise. C'est une option, pas un péage pour écrire.</p>
+            </Card>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Deux façons d'écrire : un grand panneau coupé en deux. -->
+  <section class="ways" aria-labelledby="facons">
+    <div class="container">
+      <h2 id="facons">Deux façons d'écrire, une seule relecture</h2>
+
+      <div class="split reveal">
+        <div class="pane">
+          <p class="kicker">Depuis le site</p>
+          <h3>L'éditeur en ligne</h3>
+          <p>
+            Un éditeur visuel, dans le navigateur : titres, listes, blocs de code, images. Tu ranges les pages en les faisant glisser, et tu enregistres avec Ctrl + S. Un mode Markdown existe pour qui le préfère.
+          </p>
+          <Button href={LINKS.editor}>Ouvrir l'éditeur</Button>
+        </div>
+
+        <div class="pane pane-dark">
+          <p class="kicker">Depuis GitHub</p>
+          <h3>Git et les pull requests</h3>
+          <pre><code>{gitCommands.map((command) => <><span class="prompt">$ </span>{command}{'\n'}</>)}</code></pre>
+          <p class="pane-note">
+            Les {gitCommands.length} commandes Git du guide de contribution, telles qu'elles y sont écrites. Il n'y a rien d'autre à connaître pour proposer une page depuis ton ordinateur.
+          </p>
+          <a href={LINKS.docsRepo}>Voir le dépôt de la doc</a>
+        </div>
+      </div>
+
+      <p class="ways-after">
+        Les deux chemins arrivent au même endroit : une proposition, qui attend les mêmes 2 validations. <a href="/contribuer/">Le guide détaille les deux méthodes.</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- 4. Comment ça marche : une bande sombre sur toute la largeur, quatre colonnes. -->
+  <section class="steps has-motif" aria-labelledby="fonctionnement">
+    <Motif name="pied" size="16rem" top="2rem" right="6%" rotate={28} />
+    <Motif name="pied" size="16rem" bottom="-4rem" right="22%" rotate={14} />
+    <Motif name="queue" size="22rem" bottom="-6rem" left="-4rem" rotate={-8} />
+
+    <div class="container">
+      <div class="steps-head">
+        <h2 id="fonctionnement">Comment ça marche</h2>
+        <p class="kicker">4 étapes, 2 validations, 2 façons d'écrire</p>
+      </div>
+
+      <ol class="steps-list">
+        <li class="reveal">
+          <Card title="Proposer" step={1}>
+            <p>Tu écris ou tu corriges une page, depuis l'éditeur du site ou avec Git. Dans les deux cas, elle part en relecture.</p>
+          </Card>
+        </li>
+        <li class="reveal">
+          <Card title="Relire" step={2}>
+            <p>Les autres membres de la classe lisent ta proposition, commentent et suggèrent des corrections.</p>
+          </Card>
+        </li>
+        <li class="reveal">
+          <Card title="Valider à 2" step={3}>
+            <p>Il faut 2 validations pour publier : la règle date du projet d'origine, en {CREDITS.foundedIn}. Les référents du projet peuvent publier directement quand il faut aller vite.</p>
+          </Card>
+        </li>
+        <li class="reveal">
+          <Card title="Déploiement automatique" step={4}>
+            <p>La page validée est mise en ligne toute seule, en quelques minutes. Les lecteurs qui l'avaient ouverte la voient se mettre à jour sans recharger.</p>
+          </Card>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 5. Modifier cette page : une carte plus étroite que le reste, décalée sur le côté. -->
+  <section class="edit has-motif" aria-labelledby="modifier">
+    <Motif name="main" size="24rem" bottom="-6rem" left="-5rem" rotate={18} />
+
+    <div class="container">
+      <div class="edit-card reveal">
+        <h2 id="modifier">Tu peux même modifier cette page</h2>
+        <p>
+          Cette vitrine n'a pas d'éditeur en ligne : elle se modifie sur GitHub, avec une pull request validée par 2 membres de la classe. La page que tu lis tient dans un seul fichier de {pageLineCount} lignes : <code>src/pages/index.astro</code>. Une faute, une phrase pas claire, une idée ? Propose ta modification.
+        </p>
+        <div class="button-row">
+          <Button href="/contribuer/">Lire le guide de contribution</Button>
+          <Button href={LINKS.repo} variant="secondary">Voir le dépôt sur GitHub</Button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Les limites : du texte seul, et un avertissement mis en avant. -->
+  <section class="limits" aria-labelledby="limites">
+    <div class="limits-inner">
+      <h2 id="limites">Jusqu'où va Babouins</h2>
+      <p>
+        <strong>Un complément, pas un cours.</strong> Le contenu est écrit par des étudiants, pour des étudiants. Il complète les cours et la documentation officielle des éditeurs, il ne les remplace pas. Une erreur peut passer malgré 2 relectures : tout reste modifiable, par tout le monde.
+      </p>
+      <p>
+        <strong>Une relecture, pas un verrou.</strong> Les référents du projet peuvent publier une page sans attendre les 2 validations, pour corriger vite une erreur gênante. Rien n'est caché pour autant : chaque publication reste dans l'historique, au nom de son auteur, et peut être relue après coup.
+      </p>
+      <p>
+        <strong>Un projet qui redémarre.</strong> Créé en {CREDITS.foundedIn}, à l'arrêt depuis février 2025, puis repris en 2026 par la promo {CREDITS.promo}. La documentation se remplit au fil des cours : certaines pages n'existent pas encore.
+      </p>
+      <p class="notice reveal">
+        <strong>Rien qui vienne d'une entreprise.</strong> Aucune information issue d'une entreprise d'alternance n'a sa place ici : ni adresse IP, ni nom de domaine interne, ni identifiant, ni capture d'écran non anonymisée. La règle vaut pour le texte, les images et les messages de commit. <a href="/contribuer/#règles-de-sécurité">Lire les règles de sécurité</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- 7. La reprise du projet : une simple ligne. -->
+  <div class="credits">
+    <p class="container">{CREDITS_NOTICE} <a href="/a-propos/">En savoir plus</a></p>
+  </div>
+</Layout>
+
+<style>
+  /* ----- 1. Hero ----- */
+
+  .hero {
+    padding-block: var(--space-3xl) var(--space-2xl);
+  }
+
+  .hero-inner {
+    display: grid;
+    gap: var(--space-2xl);
+    align-items: end;
+  }
+
+  /* Sans ça, un contenu qui ne se coupe pas élargirait la colonne au-delà de l'écran. */
+  .hero-inner > * {
+    min-width: 0;
+  }
+
+  h1 {
+    margin-bottom: var(--space-md);
+    font-size: var(--text-hero);
+    line-height: 0.95;
+    letter-spacing: -0.045em;
+  }
+
+  .tagline {
+    margin-bottom: var(--space-md);
+    font-family: var(--font-title);
+    font-size: var(--text-xl);
+    font-weight: 800;
+    line-height: 1.25;
+  }
+
+  .pitch {
+    max-width: 32rem;
+    margin-bottom: var(--space-lg);
+    color: var(--color-text-muted);
+    font-size: var(--text-lg);
+  }
+
+  /* La capture de la doc : un cadre fin, sans ombre. Tout le cadre est un lien vers la doc. */
+  .shot {
+    margin: 0;
+  }
+
+  .shot a {
+    display: block;
+    overflow: hidden;
+    border: var(--rule);
+    border-radius: var(--radius);
+  }
+
+  .shot a:hover {
+    border-color: var(--color-accent);
+  }
+
+  .shot :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Une capture par thème : on n'affiche que celle qui correspond au thème du site. */
+  .shot :global(.shot-dark) {
+    display: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .shot :global(.shot-light) {
+      display: none;
+    }
+
+    :global(:root:not([data-theme='light'])) .shot :global(.shot-dark) {
+      display: block;
+    }
+  }
+
+  :global(:root[data-theme='dark']) .shot :global(.shot-light) {
+    display: none;
+  }
+
+  :global(:root[data-theme='dark']) .shot :global(.shot-dark) {
+    display: block;
+  }
+
+  figcaption {
+    margin-top: var(--space-md);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+
+  /* ----- 2. Le concept ----- */
+
+  .concept {
+    padding-block: var(--space-2xl) var(--space-xl);
+  }
+
+  .concept-inner {
+    max-width: 54rem;
+  }
+
+  .concept h2 {
+    margin-bottom: var(--space-lg);
+  }
+
+  .ledger {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ledger li {
+    margin-bottom: var(--space-lg);
+  }
+
+  /* ----- 3. Deux façons d'écrire ----- */
+
+  .ways {
+    padding-block: var(--space-xl) var(--space-2xl);
+  }
+
+  .ways h2 {
+    margin-bottom: var(--space-lg);
+  }
+
+  /* Un seul grand panneau, coupé en deux : clair pour l'éditeur, sombre pour Git. */
+  .split {
+    display: grid;
+    overflow: hidden;
+    border: var(--rule);
+    border-radius: var(--radius);
+  }
+
+  .pane {
+    min-width: 0;
+    padding: var(--space-xl) var(--space-lg);
+    background: var(--color-surface);
+  }
+
+  .pane .kicker {
+    margin-bottom: var(--space-sm);
+  }
+
+  .pane p {
+    margin-bottom: var(--space-lg);
+  }
+
+  /* Panneau toujours sombre : on y force les couleurs du mode sombre. */
+  .pane-dark {
+    color-scheme: dark;
+    background: var(--color-bg-alt);
+    color: var(--color-ink);
+  }
+
+  .pane-dark pre {
+    margin: 0 0 var(--space-md);
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    line-height: 2;
+  }
+
+  .prompt {
+    color: var(--color-accent);
+    user-select: none;
+  }
+
+  .pane-dark .pane-note {
+    margin-bottom: var(--space-md);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .ways-after {
+    max-width: var(--width-prose);
+    margin: var(--space-lg) 0 0;
+    color: var(--color-text-muted);
+  }
+
+  /* ----- 4. Comment ça marche ----- */
+
+  /* Bande toujours sombre : on y force les couleurs du mode sombre. */
+  .steps {
+    color-scheme: dark;
+    padding-block: var(--space-3xl);
+    background: var(--color-bg-alt);
+    color: var(--color-ink);
+    border-block: var(--rule);
+  }
+
+  .steps-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-sm) var(--space-lg);
+    margin-bottom: var(--space-xl);
+  }
+
+  .steps-head h2,
+  .steps-head p {
+    margin: 0;
+  }
+
+  .steps-list {
+    display: grid;
+    gap: var(--space-xl) var(--space-lg);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* ----- 5. Modifier cette page ----- */
+
+  .edit {
+    padding-block: var(--space-2xl) var(--space-3xl);
+  }
+
+  .edit-card {
+    max-width: 42rem;
+    margin-left: auto;
+    padding: var(--space-xl) var(--space-lg);
+    background: var(--color-surface);
+    border: var(--rule);
+    border-radius: var(--radius);
+  }
+
+  .edit-card p {
+    margin-bottom: var(--space-lg);
+  }
+
+  .edit-card code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+  }
+
+  /* ----- 6. Les limites ----- */
+
+  .limits {
+    padding-block: var(--space-2xl);
+    background: var(--color-bg-alt);
+    border-top: var(--rule);
+  }
+
+  .limits-inner {
+    max-width: var(--width-prose);
+    margin-inline: auto;
+    padding-inline: var(--space-lg);
+  }
+
+  .notice {
+    margin: var(--space-lg) 0 0;
+    padding: var(--space-md) var(--space-lg);
+    background: var(--color-bg);
+    border-left: 3px solid var(--color-accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+  }
+
+  /* ----- 7. La reprise ----- */
+
+  .credits {
+    padding-block: var(--space-lg);
+    border-top: var(--rule);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .credits p {
+    margin-bottom: 0;
+  }
+
+  /* ----- Écrans plus larges ----- */
+
+  @media (min-width: 36rem) {
+    .steps-list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .edit-card,
+    .pane {
+      padding: var(--space-xl);
+    }
+  }
+
+  @media (min-width: 60rem) {
+    .hero-inner {
+      grid-template-columns: 1fr 1.1fr;
+    }
+
+    .split {
+      grid-template-columns: 1.2fr 1fr;
+    }
+
+    .steps-list {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,366 @@
+/*
+  Styles globaux du site.
+  Toutes les couleurs, tailles, espacements et polices sont des variables CSS définies ici.
+  Pour changer l'apparence du site, c'est (presque toujours) ce bloc :root qu'il faut modifier.
+
+  Le parti pris : sobre. Un fond papier, une encre, UNE seule couleur d'accent (la terre cuite
+  du museau de la mascotte), des filets fins. Ce qui donne du caractère au site, ce n'est pas
+  la décoration mais le rythme : chaque section de l'accueil a une forme différente.
+*/
+
+:root {
+  /* Le site suit le thème du système (clair ou sombre). */
+  color-scheme: light dark;
+
+  /*
+    Couleurs : light-dark(couleur en mode clair, couleur en mode sombre).
+    Contrastes vérifiés (WCAG AA) : pense à les revérifier si tu changes une couleur.
+  */
+  --color-bg: light-dark(#faf7f2, #14110e);
+  --color-bg-alt: light-dark(#f1ebe1, #1d1915);
+  --color-surface: light-dark(#ffffff, #1d1915);
+  --color-ink: light-dark(#1f1a15, #ece5da);
+  --color-text-muted: light-dark(#5e554b, #a89e91);
+  --color-rule: light-dark(#d9cfbf, #3a332b); /* filets et bordures */
+  --color-accent: light-dark(#a8431a, #e39a6f);
+  --color-accent-hover: light-dark(#7f3012, #f0b892);
+  --color-on-accent: light-dark(#ffffff, #14110e);
+  --color-focus: light-dark(#1d4ed8, #93c5fd);
+
+  /* Blocs de code : sombres dans les deux thèmes. */
+  --color-code-bg: #24292e;
+  --color-code-text: #e1e4e8;
+
+  /*
+    Polices. Celle des titres est déclarée dans astro.config.mjs (option `fonts`),
+    les autres sont celles du système : rien à télécharger.
+  */
+  --font-title: var(--font-bricolage, system-ui, sans-serif);
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
+
+  /* Tailles de texte */
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: clamp(1.75rem, 1.35rem + 1.8vw, 2.6rem);
+  --text-hero: clamp(3rem, 1.6rem + 6.5vw, 6.25rem);
+
+  /* Espacements */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6rem;
+
+  /* Mise en page */
+  --width-content: 70rem;
+  --width-prose: 44rem;
+  --radius-sm: 0.3rem;
+  --radius: 0.5rem;
+  --rule: 1px solid var(--color-rule);
+}
+
+/* Thème forcé par le bouton du header (voir ThemeToggle.astro). */
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+/* ---------- Base ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--space-3xl);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.65;
+}
+
+/*
+  Conteneur racine (voir Layout.astro). C'est lui, et pas <body>, qui coupe ce qui dépasse
+  sur les côtés : `overflow-x` sur <body> ne coupe rien.
+*/
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: clip;
+}
+
+main {
+  flex: 1;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0 0 var(--space-md);
+  font-family: var(--font-title);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+h1,
+h2 {
+  font-size: var(--text-2xl);
+}
+
+h3 {
+  font-size: var(--text-xl);
+}
+
+p {
+  margin: 0 0 var(--space-md);
+}
+
+a {
+  color: var(--color-accent);
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  color: var(--color-accent-hover);
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+/* Focus bien visible pour la navigation au clavier. */
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* ---------- Utilitaires ---------- */
+
+/*
+  Largeur du contenu. Attention : sur un élément qui porte cette classe, ne jamais écrire
+  `padding: ...` en raccourci (ça effacerait les marges latérales). Utiliser `padding-block`.
+*/
+.container {
+  width: 100%;
+  max-width: var(--width-content);
+  margin-inline: auto;
+  padding-inline: var(--space-lg);
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+/* Petit texte en capitales, au-dessus d'un titre ou sous un extrait. */
+.kicker {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/*
+  Section qui accueille un motif de fond (composant Motif.astro) :
+  le motif passe derrière le contenu, et ce qui dépasse de la section est coupé.
+*/
+.has-motif {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+}
+
+/* Petit bouton carré du header (menu mobile, thème). */
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  background: transparent;
+  color: var(--color-ink);
+  border: var(--rule);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+.icon-button:hover {
+  background: var(--color-bg-alt);
+  color: var(--color-accent);
+}
+
+/* Visible uniquement par les lecteurs d'écran. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Lien "Aller au contenu" : apparaît au premier appui sur Tab. */
+.skip-link {
+  position: absolute;
+  top: var(--space-sm);
+  left: var(--space-sm);
+  z-index: 100;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+  color: var(--color-on-accent);
+}
+
+/* ---------- Mouvement ---------- */
+
+/*
+  Apparition douce au défilement, en CSS pur (aucun JavaScript).
+  L'opacité de départ est 0.3 et jamais 0 : le contenu reste lisible même si l'animation
+  ne se joue pas. Firefox ne gère pas encore `animation-timeline` : la page y est simplement fixe.
+  Rien ne bouge si l'utilisateur a demandé moins d'animations.
+*/
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 4% cover 26%;
+    }
+
+    @keyframes reveal-in {
+      from {
+        opacity: 0.3;
+        transform: translateY(26px);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  * {
+    transition: none !important;
+  }
+}
+
+/* ---------- Contenu rédigé (pages Markdown, À propos) ---------- */
+
+.prose {
+  max-width: var(--width-prose);
+  margin-inline: auto;
+  padding: var(--space-2xl) var(--space-lg);
+}
+
+.prose h1 {
+  font-size: clamp(2.2rem, 1.6rem + 2.8vw, 3.4rem);
+}
+
+.prose .lead {
+  color: var(--color-text-muted);
+  font-size: var(--text-lg);
+}
+
+.prose h2 {
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-lg);
+  border-top: var(--rule);
+  font-size: 1.75rem;
+}
+
+.prose h3 {
+  margin-top: var(--space-lg);
+  font-size: 1.25rem;
+}
+
+.prose ul,
+.prose ol {
+  margin: 0 0 var(--space-md);
+  padding-left: var(--space-lg);
+}
+
+.prose li {
+  margin-bottom: var(--space-sm);
+}
+
+.prose li::marker {
+  color: var(--color-accent);
+}
+
+/* Encadré d'avertissement (en Markdown : une ligne qui commence par ">"). */
+.prose blockquote {
+  margin: 0 0 var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-bg-alt);
+  border-left: 3px solid var(--color-accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.prose blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+.prose code {
+  padding: 0.15em 0.4em;
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+.prose pre {
+  margin: 0 0 var(--space-lg);
+  padding: var(--space-md);
+  overflow-x: auto;
+  background: var(--color-code-bg);
+  color: var(--color-code-text);
+  border-radius: var(--radius);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.prose pre code {
+  padding: 0;
+  background: none;
+  font-size: inherit;
+}

@@ -1,0 +1,153 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+import { NAV, SITE } from '../config';
+
+// Chemin de la page affichée, sans le "/" final, pour repérer le lien actif du menu.
+const withoutTrailingSlash = (path: string) => path.replace(/\/$/, '') || '/';
+const currentPath = withoutTrailingSlash(Astro.url.pathname);
+---
+
+<header class="site-header">
+  <div class="container inner">
+    <a href="/" class="brand">
+      <img src={SITE.logo} alt="" width="40" height="40" />
+      <span>{SITE.name}</span>
+    </a>
+
+    <!-- Menu mobile sans JavaScript : une case à cocher (cachée) ouvre et ferme le menu. -->
+    <input type="checkbox" id="nav-toggle" class="nav-toggle visually-hidden" />
+    <label for="nav-toggle" class="icon-button nav-button">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+        <path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+      </svg>
+      <span class="visually-hidden">Afficher le menu</span>
+    </label>
+
+    <nav class="site-nav" aria-label="Navigation principale">
+      <ul>
+        {
+          NAV.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                aria-current={!item.external && withoutTrailingSlash(item.href) === currentPath ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="theme"><ThemeToggle /></div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--color-bg);
+    border-bottom: var(--rule);
+  }
+
+  .inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-sm);
+    padding-block: var(--space-sm);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-right: auto;
+    color: var(--color-ink);
+    font-family: var(--font-title);
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+
+  .brand img {
+    display: block;
+  }
+
+  /* ----- Mobile : menu replié, ouvert par la case à cocher ----- */
+
+  .nav-toggle:focus-visible + .nav-button {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 3px;
+  }
+
+  .theme {
+    order: 2;
+  }
+
+  .site-nav {
+    display: none;
+    order: 3;
+    flex-basis: 100%;
+  }
+
+  .nav-toggle:checked ~ .site-nav {
+    display: block;
+  }
+
+  .site-nav ul {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: var(--space-sm) 0;
+    list-style: none;
+  }
+
+  .site-nav a {
+    display: block;
+    padding: var(--space-sm) var(--space-md);
+    color: var(--color-ink);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .site-nav a:hover {
+    color: var(--color-accent);
+  }
+
+  /* Page en cours : soulignée dans la couleur d'accent. */
+  .site-nav a[aria-current='page'] {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.45em;
+  }
+
+  /* ----- Écrans plus larges : menu toujours visible, sur une ligne ----- */
+
+  @media (min-width: 48rem) {
+    .nav-toggle,
+    .nav-button {
+      display: none;
+    }
+
+    .site-nav {
+      display: block;
+      order: 0;
+      flex-basis: auto;
+    }
+
+    .site-nav ul {
+      flex-direction: row;
+      padding: 0;
+    }
+
+    .theme {
+      order: 0;
+    }
+  }
+</style>

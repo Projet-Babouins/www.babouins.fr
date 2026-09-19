@@ -1,0 +1,74 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
+import Motif from '../components/Motif.astro';
+import { LINKS } from '../config';
+---
+
+<Layout
+  title="Page introuvable"
+  description="Erreur 404 : cette page n'existe pas, ou elle a été déplacée."
+  noindex
+>
+  <section class="not-found has-motif">
+    <!-- La piste s'arrête ici : quelques empreintes, puis plus rien. -->
+    <Motif name="pied" size="13rem" top="3rem" left="4%" rotate={38} />
+    <Motif name="pied" size="13rem" top="11rem" left="16%" rotate={52} />
+    <Motif name="piste" size="60rem" bottom="-2rem" right="-14rem" rotate={6} />
+
+    <div class="inner">
+      <p class="kicker">Erreur 404</p>
+      <h1>Cette branche ne mène nulle part</h1>
+      <p class="lead">La piste s'arrête ici : la page que tu cherches n'existe pas, ou elle a été déplacée.</p>
+
+      <!-- Le vrai message d'erreur de Git quand une branche n'existe pas. -->
+      <pre><code>$ git checkout page-demandee
+error: pathspec 'page-demandee' did not match any file(s) known to git</code></pre>
+
+      <div class="button-row">
+        <Button href="/">Retour à l'accueil</Button>
+        <Button href={LINKS.docs} variant="secondary">Explorer la doc</Button>
+      </div>
+
+      <p class="report">Un lien du site t'a amené ici ? <a href={LINKS.issues}>Signale-le</a>, ou corrige-le avec une pull request.</p>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .not-found {
+    padding-block: var(--space-3xl);
+  }
+
+  .inner {
+    max-width: var(--width-prose);
+    margin-inline: auto;
+    padding-inline: var(--space-lg);
+  }
+
+  h1 {
+    font-size: clamp(2.2rem, 1.6rem + 2.8vw, 3.4rem);
+  }
+
+  .lead {
+    color: var(--color-text-muted);
+    font-size: var(--text-lg);
+  }
+
+  pre {
+    margin: var(--space-lg) 0 var(--space-xl);
+    padding: var(--space-md);
+    overflow-x: auto;
+    background: var(--color-code-bg);
+    color: var(--color-code-text);
+    border-radius: var(--radius);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+  }
+
+  .report {
+    margin-top: var(--space-xl);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+</style>

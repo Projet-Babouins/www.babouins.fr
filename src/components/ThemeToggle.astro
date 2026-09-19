@@ -1,0 +1,50 @@
+---
+// Bouton pour forcer le thème clair ou sombre : le seul JavaScript du site.
+// Sans JavaScript, le bouton reste caché et le site suit simplement le thème du système.
+// Le choix est mémorisé dans le navigateur, puis réappliqué par le petit script de Layout.astro.
+---
+
+<button
+  type="button"
+  id="theme-toggle"
+  class="icon-button theme-toggle"
+  aria-label="Basculer entre le thème clair et le thème sombre"
+  title="Changer de thème"
+>
+  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+    <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5"></circle>
+    <path d="M12 3a9 9 0 0 1 0 18Z" fill="currentColor"></path>
+  </svg>
+</button>
+
+<script>
+  const button = document.getElementById('theme-toggle');
+
+  button?.addEventListener('click', () => {
+    const root = document.documentElement;
+    // Thème actuel : celui forcé par l'utilisateur, sinon celui du système.
+    const current =
+      root.dataset.theme ??
+      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    const next = current === 'dark' ? 'light' : 'dark';
+
+    root.dataset.theme = next;
+    try {
+      localStorage.setItem('theme', next);
+    } catch {
+      // Stockage indisponible (navigation privée stricte) : le choix vaut juste pour cette page.
+    }
+  });
+</script>
+
+<style>
+  /* Caché par défaut, affiché seulement si JavaScript est actif. */
+  .theme-toggle {
+    display: none;
+  }
+
+  /* La classe "js" est ajoutée sur <html> par le script de Layout.astro. */
+  :global(.js) .theme-toggle {
+    display: inline-flex;
+  }
+</style>

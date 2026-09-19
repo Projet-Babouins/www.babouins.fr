@@ -1,0 +1,99 @@
+---
+// Motifs de fond. Tous viennent d'une seule idée : LA PISTE DE LA TROUPE.
+// Une troupe de babouins qui avance laisse des traces : chaque contribution aussi.
+//   main  : empreinte de main        pied  : empreinte de pied
+//   piste : le chemin en pointillés  queue : la queue arquée d'un babouin en marche
+//
+// Règles à garder si tu en ajoutes un :
+//   - dessin au trait uniquement (jamais de remplissage), trait fin ;
+//   - opacité entre 0.05 et 0.07 : si le motif se remarque, il est trop fort ;
+//   - toujours derrière le contenu, et il peut dépasser de la section (il sera coupé) ;
+//   - couleur d'accent du site, pas de nouvelle couleur ;
+//   - pas plus de 5 motifs au total, tous liés à la piste.
+//
+// La section qui accueille un motif doit porter la classe "has-motif" (voir global.css).
+// Exemple : <Motif name="main" size="26rem" top="-3rem" right="-5rem" rotate={-20} />
+interface Props {
+  name: 'main' | 'pied' | 'piste' | 'queue';
+  size: string;
+  top?: string;
+  right?: string;
+  bottom?: string;
+  left?: string;
+  rotate?: number;
+}
+
+const { name, size, top, right, bottom, left, rotate = 0 } = Astro.props;
+
+// Position du motif dans sa section.
+const style = [
+  `width: ${size}`,
+  top && `top: ${top}`,
+  right && `right: ${right}`,
+  bottom && `bottom: ${bottom}`,
+  left && `left: ${left}`,
+  `transform: rotate(${rotate}deg)`,
+]
+  .filter(Boolean)
+  .join('; ');
+
+const viewBoxes = {
+  main: '0 0 100 110',
+  pied: '0 0 100 140',
+  piste: '0 0 800 200',
+  queue: '0 0 120 130',
+};
+---
+
+<svg class="motif" viewBox={viewBoxes[name]} style={style} aria-hidden="true" focusable="false">
+  {
+    name === 'main' && (
+      <>
+        <path d="M30 72c0-14 9-23 20-23s20 9 20 23c0 17-8 31-20 31s-20-14-20-31Z" />
+        <ellipse cx="27" cy="35" rx="5" ry="13" transform="rotate(-18 27 35)" />
+        <ellipse cx="42" cy="24" rx="5" ry="15" transform="rotate(-6 42 24)" />
+        <ellipse cx="58" cy="24" rx="5" ry="15" transform="rotate(6 58 24)" />
+        <ellipse cx="73" cy="35" rx="5" ry="13" transform="rotate(18 73 35)" />
+        <ellipse cx="86" cy="68" rx="5" ry="11" transform="rotate(62 86 68)" />
+      </>
+    )
+  }
+  {
+    name === 'pied' && (
+      <>
+        <path d="M32 72c0-14 8-22 18-22s18 8 18 22c0 12-3 22-5 34-2 13-6 24-13 24s-11-11-13-24c-2-12-5-22-5-34Z" />
+        <ellipse cx="37" cy="33" rx="4.5" ry="11" transform="rotate(-10 37 33)" />
+        <ellipse cx="49" cy="28" rx="4.5" ry="12" />
+        <ellipse cx="61" cy="30" rx="4.5" ry="11" transform="rotate(8 61 30)" />
+        <ellipse cx="72" cy="38" rx="4.5" ry="10" transform="rotate(18 72 38)" />
+        <ellipse cx="17" cy="62" rx="5" ry="12" transform="rotate(-58 17 62)" />
+      </>
+    )
+  }
+  {
+    name === 'piste' && (
+      <path d="M0 150C120 40 230 190 380 110S640 10 800 90" stroke-dasharray="3 14" stroke-linecap="round" />
+    )
+  }
+  {name === 'queue' && <path d="M8 124C10 70 28 22 58 18s50 30 46 106" stroke-linecap="round" />}
+</svg>
+
+<style>
+  .motif {
+    position: absolute;
+    z-index: -1;
+    max-width: none;
+    height: auto;
+    color: var(--color-accent);
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.2;
+    opacity: 0.06;
+    pointer-events: none;
+  }
+
+  /* Le trait garde la même épaisseur, quelle que soit la taille du motif. */
+  .motif * {
+    vector-effect: non-scaling-stroke;
+  }
+</style>
