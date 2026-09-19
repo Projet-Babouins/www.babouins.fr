@@ -9,7 +9,7 @@ Merci de vouloir participer ! Ceci est la version courte. Le guide complet, pas 
 1. Tu proposes une modification avec une pull request (PR).
 2. Les autres membres de la classe la relisent.
 3. Il faut **2 validations** pour qu'elle soit fusionnée.
-4. Le site se met à jour automatiquement après le merge sur `main`.
+4. Après le merge sur `main`, le serveur du site récupère la nouvelle version, la reconstruit et redémarre.
 
 ## Sans rien installer
 
