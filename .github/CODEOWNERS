@@ -1,0 +1,13 @@
+# CODEOWNERS : les personnes listées ici sont automatiquement ajoutées
+# comme relecteurs sur chaque pull request.
+#
+# Format : <fichiers concernés> <@utilisateur ou @organisation/équipe>
+#   *            tous les fichiers du dépôt
+#   /src/pages/  seulement ce dossier
+#
+# À FAIRE : remplacer l'équipe ci-dessous par une équipe qui existe vraiment dans
+# l'organisation (GitHub > Projet-Babouins > Teams), ou par des pseudos (@pseudo1 @pseudo2).
+# L'équipe ou les personnes doivent avoir un accès en écriture au dépôt, sinon GitHub ignore la ligne.
+# Documentation : https://docs.github.com/fr/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+* @Projet-Babouins/admins

@@ -1,0 +1,6 @@
+# Réglages de la page "Nouvelle issue".
+blank_issues_enabled: false
+contact_links:
+  - name: Poser une question
+    url: https://github.com/Projet-Babouins/www.babouins.fr/discussions
+    about: Les questions et les échanges entre contributeurs se passent sur GitHub Discussions.

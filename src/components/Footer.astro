@@ -1,0 +1,99 @@
+---
+import { CREDITS, LICENSES, LINKS, NAV, SITE } from '../config';
+
+const internalLinks = NAV.filter((item) => !item.external);
+---
+
+<footer class="site-footer">
+  <div class="container columns">
+    <div>
+      <p class="brand">
+        <img src={SITE.logo} alt="" width="32" height="32" loading="lazy" />
+        {SITE.name}
+      </p>
+      <p class="muted">{SITE.tagline}.</p>
+      <p class="muted">Un projet des étudiants de BTS SIO du {CREDITS.school}.</p>
+    </div>
+
+    <nav aria-label="Pages du site">
+      <p class="kicker">Le site</p>
+      <ul>
+        {internalLinks.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <nav aria-label="Liens du projet">
+      <p class="kicker">Le projet</p>
+      <ul>
+        <li><a href={LINKS.docs}>Documentation</a></li>
+        <li><a href={LINKS.editor}>Écrire une page</a></li>
+        <li><a href={LINKS.organization}>Organisation GitHub</a></li>
+        <li><a href={LINKS.repo}>Code de ce site</a></li>
+        <li><a href={LINKS.discussions}>GitHub Discussions</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="container legal">
+    <p>
+      Contenu sous <a href={LICENSES.content.href}>{LICENSES.content.name}</a>, code sous <a href={LICENSES.code.href}>{LICENSES.code.name}</a>.
+    </p>
+    <p>En contribuant, vous acceptez que votre contenu soit publié sous {LICENSES.content.name}.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding-block: var(--space-xl);
+    background: var(--color-bg-alt);
+    border-top: var(--rule);
+    font-size: var(--text-sm);
+  }
+
+  .columns {
+    display: grid;
+    gap: var(--space-lg);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+    font-family: var(--font-title);
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .kicker {
+    margin-bottom: var(--space-sm);
+  }
+
+  .muted,
+  .legal {
+    color: var(--color-text-muted);
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li a {
+    display: inline-block;
+    padding-block: var(--space-xs);
+  }
+
+  .legal {
+    margin-top: var(--space-lg);
+    padding-top: var(--space-lg);
+    border-top: var(--rule);
+  }
+
+  .legal p {
+    margin-bottom: var(--space-xs);
+  }
+</style>

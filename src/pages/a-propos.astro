@@ -1,0 +1,127 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { CREDITS, FOUNDER_NAMES, LICENSES, LINKS, ORIGINS } from '../config';
+---
+
+<Layout
+  title="À propos"
+  description="L'histoire du projet Babouins, les personnes qui l'ont créé et repris, et les licences du contenu et du code."
+>
+  <article class="prose">
+    <h1>À propos</h1>
+    <p class="lead">
+      Babouins est une plateforme collaborative où les étudiants de BTS SIO centralisent les procédures, commandes et tutos vus en cours.
+    </p>
+
+    <h2>Historique</h2>
+    <ol class="timeline">
+      <li>
+        <strong>Juin {CREDITS.foundedIn} : la création.</strong>
+        Babouins naît dans une classe de BTS SIO du {CREDITS.school}, à l'initiative de {FOUNDER_NAMES}. Le constat : entre les commandes à apprendre, les procédures à suivre et les tutoriels à assimiler, on s'y perd vite. L'idée : regrouper ces connaissances dans un espace unique, accessible à toute la classe, et l'écrire ensemble.
+        <blockquote>
+          <p>Le BTS SIO, c'est super intéressant, mais c'est aussi ultra dense.</p>
+          <footer>Dimitri Chassignol, <a href={ORIGINS.article}>article de présentation du projet</a>, septembre 2024</footer>
+        </blockquote>
+      </li>
+      <li>
+        <strong>Juillet 2024 : la première doc.</strong>
+        Le dépôt de docs.babouins.fr est créé le 1er juillet 2024, avec Docusaurus. Chaque modification passe par une pull request sur GitHub, validée par au moins 2 personnes de la classe, puis le site se met à jour tout seul. Sur les 73 commits du dépôt, 56 datent de ce seul mois. Les pages portent surtout sur le SISR : Docker, LVM, sauvegardes et snapshots, SFTP par clé privée, routage statique Cisco, Windows Server 2022.
+      </li>
+      <li>
+        <strong>Septembre 2024 : le projet s'ouvre.</strong>
+        Dimitri Chassignol présente Babouins dans un article et invite à contribuer, que l'on soit étudiant en BTS SIO ou simplement curieux. Le projet y est décrit comme un moyen de centraliser les connaissances, mais aussi de se former aux méthodes du métier : valider le travail des autres, gérer des versions, travailler sur des branches.
+      </li>
+      <li>
+        <strong>2025 : la pause.</strong>
+        La dernière contribution date de février 2025. Le dépôt compte alors 4 contributeurs et 5 forks. Il est archivé sur GitHub en mars 2026.
+      </li>
+      <li>
+        <strong>2026 : la reprise.</strong>
+        {CREDITS.lead}, étudiant dans le même centre, découvre le projet archivé et le relance avec la promo {CREDITS.promo}. Ce qui reste : l'objectif, la relecture par 2 personnes, la mise en ligne automatique, et une page d'accueil que tout le monde peut modifier. Ce qui change : le site est refait avec Astro, et un éditeur en ligne permet d'écrire une page sans connaître Git. Git et les pull requests restent possibles pour qui veut pratiquer les outils du métier.
+      </li>
+    </ol>
+    <p>
+      Sources : <a href={ORIGINS.docsRepo}>le dépôt du projet d'origine</a> (archivé, en lecture seule) et <a href={ORIGINS.article}>l'article de Dimitri Chassignol</a>.
+    </p>
+
+    <h2>Crédits</h2>
+    <p>Babouins est né et a été repris au même endroit : le {CREDITS.school}, par des étudiants de BTS SIO.</p>
+    <h3>Créateurs du projet original ({CREDITS.foundedIn})</h3>
+    <ul>
+      {CREDITS.founders.map((name) => <li>{name}</li>)}
+    </ul>
+
+    <h3>Équipe actuelle</h3>
+    <ul>
+      <li>Promo {CREDITS.promo}, à l'initiative de {CREDITS.lead}</li>
+      <li>
+        Toutes les personnes qui contribuent : la liste complète est visible sur <a href={`${LINKS.repo}/graphs/contributors`}>la page des contributeurs GitHub</a>
+      </li>
+    </ul>
+
+    <h2>L'écosystème</h2>
+    <ul>
+      <li><a href="/">www.babouins.fr</a> : ce site, la vitrine et le point d'entrée du projet</li>
+      <li><a href={LINKS.docs}>docs.babouins.fr</a> : la documentation, avec son <a href={LINKS.editor}>éditeur en ligne</a></li>
+      <li><a href={LINKS.organization}>L'organisation GitHub</a> : le code de la doc et de ce site, pour contribuer avec Git</li>
+      <li><a href={LINKS.discussions}>GitHub Discussions</a> : les échanges entre contributeurs</li>
+    </ul>
+
+    <h2>Licences</h2>
+    <ul>
+      <li>
+        <strong>Contenu (textes, tutos, procédures) :</strong>
+        <a href={LICENSES.content.href}>{LICENSES.content.name}</a>. Tu peux le partager et l'adapter, à condition de citer le projet et de garder la même licence.
+      </li>
+      <li>
+        <strong>Code du site :</strong>
+        <a href={LICENSES.code.href}>licence {LICENSES.code.name}</a>. Tu peux le réutiliser librement, en conservant la mention de copyright.
+      </li>
+    </ul>
+    <p>En contribuant, vous acceptez que votre contenu soit publié sous {LICENSES.content.name}.</p>
+  </article>
+</Layout>
+
+<style>
+  .timeline {
+    margin-left: var(--space-sm);
+    padding-left: 0;
+    list-style: none;
+    border-left: var(--rule);
+  }
+
+  .timeline li {
+    position: relative;
+    margin-bottom: var(--space-lg);
+    padding-left: var(--space-lg);
+  }
+
+  /* Le repère sur la ligne du temps. */
+  .timeline li::before {
+    content: '';
+    position: absolute;
+    top: 0.5em;
+    left: -0.35rem;
+    width: 0.65rem;
+    height: 0.65rem;
+    background: var(--color-accent);
+    border-radius: 50%;
+  }
+
+  .timeline strong {
+    display: block;
+  }
+
+  .timeline blockquote {
+    margin-block: var(--space-md) 0;
+  }
+
+  .timeline blockquote p {
+    margin-bottom: var(--space-xs);
+  }
+
+  .timeline blockquote footer {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+</style>

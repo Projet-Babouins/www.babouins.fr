@@ -1,0 +1,42 @@
+name: Proposer une amélioration
+description: Une idée pour améliorer le site vitrine (contenu, design, accessibilité...)
+title: "[Amélioration] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de prendre le temps de proposer une idée ! Pour une simple question, passe plutôt par GitHub Discussions.
+  - type: textarea
+    id: idee
+    attributes:
+      label: Ton idée
+      description: Qu'aimerais-tu ajouter ou changer ?
+    validations:
+      required: true
+  - type: textarea
+    id: pourquoi
+    attributes:
+      label: Pourquoi ?
+      description: Quel problème est-ce que ça règle, et pour qui ?
+    validations:
+      required: true
+  - type: input
+    id: page
+    attributes:
+      label: Page concernée
+      description: Si l'idée concerne une page précise.
+      placeholder: "Exemple : /contribuer"
+  - type: checkboxes
+    id: participation
+    attributes:
+      label: Participation
+      options:
+        - label: Je suis partant pour faire la pull request moi-même
+  - type: checkboxes
+    id: securite
+    attributes:
+      label: Sécurité
+      options:
+        - label: Mon message ne contient aucune info sensible (IP, domaines internes, identifiants, captures non anonymisées)
+          required: true
