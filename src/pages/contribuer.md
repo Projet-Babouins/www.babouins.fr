@@ -24,14 +24,16 @@ Il y a deux façons d'écrire dans Babouins. Tu choisis celle qui te convient : 
 La plus simple. Tout se passe dans le navigateur, avec un éditeur qui ressemble à un traitement de texte.
 
 1. Ouvre [docs.babouins.fr/admin](https://docs.babouins.fr/admin) et connecte-toi avec ton compte GitHub.
-2. Clique sur "Nouveau cours", ou choisis un cours existant dans la liste pour le corriger.
-3. Choisis le dossier du cours, donne-lui un titre et une courte description.
+2. Clique sur "Nouvelle page", ou choisis une page existante dans la liste pour la corriger.
+3. Choisis le dossier de la page, donne-lui un titre et une courte description.
 4. Écris. L'éditeur est visuel (titres, listes, blocs de code, images), et tu peux passer en mode Markdown si tu préfères. Les images acceptées sont les PNG, JPEG et WebP.
 5. Enregistre (`Ctrl` + `S`). Ta page part en relecture.
 
 Bon à savoir :
 
-- Tu peux ranger les cours et les dossiers en les faisant glisser dans la liste : c'est cet ordre qui donne le menu du site.
+- Pour corriger une page que tu es en train de lire, va tout en bas : le lien "Modifier cette page" l'ouvre dans l'éditeur (ou sur GitHub, voir la méthode 2).
+- Tu peux ranger les pages et les dossiers en les faisant glisser dans la liste : c'est cet ordre qui donne le menu du site. Comme le reste, un rangement passe par la relecture.
+- Tant que ta proposition n'est pas publiée, tes enregistrements suivants s'y ajoutent. Un bandeau en haut de l'éditeur t'indique où elle en est.
 - Chaque enregistrement est gardé dans l'historique du projet, à ton nom. Rien ne se perd, et tout peut être annulé.
 - Si quelqu'un a modifié la même page pendant que tu écrivais, l'éditeur te prévient au lieu d'écraser son travail.
 
@@ -41,14 +43,14 @@ Pour celles et ceux qui veulent pratiquer Git et les pull requests (PR). C'est a
 
 Il y a deux dépôts :
 
-- `docs.babouins.fr` : la documentation (les cours sont dans `src/content/docs/cours/`) ;
+- `docs.babouins.fr` : la documentation (les pages sont dans `src/content/docs/docs/`) ;
 - `www.babouins.fr` : ce site vitrine (les pages sont dans `src/pages/`).
 
 ### Dans le navigateur
 
 Pratique pour une petite correction, sans rien installer.
 
-1. Sur GitHub, ouvre le fichier à modifier dans [le dépôt de la doc](https://github.com/Projet-Babouins/docs.babouins.fr) ou dans [celui de la vitrine](https://github.com/Projet-Babouins/www.babouins.fr).
+1. En bas de chaque page de la documentation, le lien "Modifier cette page : sur GitHub" ouvre directement le bon fichier. Sinon, ouvre le fichier à modifier dans [le dépôt de la doc](https://github.com/Projet-Babouins/docs.babouins.fr) ou dans [celui de la vitrine](https://github.com/Projet-Babouins/www.babouins.fr).
 2. Clique sur l'icône en forme de crayon ("Edit this file"), puis fais ta modification.
 3. Clique sur "Commit changes...", décris ta modification en une phrase, et choisis "Create a new branch for this commit and start a pull request".
 4. Remplis le modèle de PR, puis clique sur "Create pull request".
@@ -97,7 +99,7 @@ Retourne enfin sur la page du dépôt : GitHub affiche un bandeau "Compare & pul
 
 Quelle que soit la méthode, une proposition doit recevoir **2 validations** avant d'être publiée. Relire les autres fait autant avancer le projet qu'écrire.
 
-1. Ouvre la proposition : depuis l'éditeur du site, ou depuis l'onglet "Pull requests" du dépôt sur GitHub.
+1. Ouvre la proposition : depuis l'éditeur du site (bouton "Relectures"), ou depuis l'onglet "Pull requests" du dépôt sur GitHub. Ce sont les mêmes propositions : un avis donné d'un côté apparaît de l'autre.
 2. Vérifie que :
    - le contenu est juste, clair et sans faute ;
    - la vérification automatique du build est au vert ;
