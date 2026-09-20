@@ -6,6 +6,9 @@
   Le parti pris : sobre. Un fond papier, une encre, UNE seule couleur d'accent (la terre cuite
   du museau de la mascotte), des filets fins. Ce qui donne du caractère au site, ce n'est pas
   la décoration mais le rythme : chaque section de l'accueil a une forme différente.
+
+  Une seule idée visuelle : LA PISTE. Une ligne de points dans la couleur d'accent, un anneau
+  à chaque arrêt. Elle relie les sections de l'accueil, les étapes, les dates du projet.
 */
 
 :root {
@@ -45,7 +48,8 @@
   --text-lg: 1.125rem;
   --text-xl: 1.375rem;
   --text-2xl: clamp(1.75rem, 1.35rem + 1.8vw, 2.6rem);
-  --text-hero: clamp(3rem, 1.6rem + 6.5vw, 6.25rem);
+  /* Le nom du site, dans le hero : avec la mascotte à côté, il occupe toute la largeur du contenu. */
+  --text-hero: clamp(3rem, 17.6vw - 0.4rem, 12.25rem);
 
   /* Espacements */
   --space-xs: 0.25rem;
@@ -62,6 +66,17 @@
   --radius-sm: 0.3rem;
   --radius: 0.5rem;
   --rule: 1px solid var(--color-rule);
+
+  /*
+    La piste (voir plus bas, et Piste.astro). Un point tous les --piste-gap,
+    à poser en fond d'un élément de 4px : `background: var(--piste-x)` (ligne horizontale)
+    ou `background: var(--piste-y)` (ligne verticale).
+  */
+  --piste-gap: 10px;
+  --piste-ring: 0.875rem; /* diamètre de l'anneau d'un arrêt */
+  --piste-dots: radial-gradient(circle, var(--color-accent) 1.25px, transparent 1.75px);
+  --piste-x: var(--piste-dots) 0 0 / var(--piste-gap) 4px repeat-x;
+  --piste-y: var(--piste-dots) 0 0 / 4px var(--piste-gap) repeat-y;
 }
 
 /* Thème forcé par le bouton du header (voir ThemeToggle.astro). */
@@ -150,6 +165,12 @@ svg {
   max-width: 100%;
 }
 
+/* Le texte sélectionné à la souris passe au jaune banane. */
+::selection {
+  background: #ecc04f;
+  color: #1f1a15;
+}
+
 /* Focus bien visible pour la navigation au clavier. */
 :focus-visible {
   outline: 3px solid var(--color-focus);
@@ -193,6 +214,31 @@ svg {
   position: relative;
   isolation: isolate;
   overflow: clip;
+}
+
+/*
+  Un arrêt sur la piste. La classe dessine l'anneau (::after) et prépare la ligne de points
+  vers l'arrêt suivant (::before). Celui qui l'utilise place les deux (top, left, largeur...)
+  et choisit le sens de la ligne : `background: var(--piste-x)` ou `var(--piste-y)`.
+  Sur un fond autre que celui de la page, donner sa couleur à --piste-bg : l'anneau reste plein.
+*/
+.stop {
+  position: relative;
+}
+
+.stop::before,
+.stop::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+}
+
+.stop::after {
+  width: var(--piste-ring);
+  height: var(--piste-ring);
+  background: var(--piste-bg, var(--color-bg));
+  border: 2px solid var(--color-accent);
+  border-radius: 50%;
 }
 
 /* Petit bouton carré du header (menu mobile, thème). */

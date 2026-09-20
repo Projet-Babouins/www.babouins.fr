@@ -1,0 +1,171 @@
+---
+// La piste : une suite d'arrêts reliés par une ligne de points.
+// Verticale sur petit écran, horizontale sur grand écran (un arrêt par colonne).
+//
+//   stops   : les arrêts, dans l'ordre. `label` est le petit texte au-dessus du titre (un numéro, une date).
+//             `pause: true` : la ligne s'interrompt entre cet arrêt et le suivant.
+//   open    : la piste continue après le dernier arrêt (elle s'estompe). Sinon, le dernier arrêt
+//             est un anneau plein : on est arrivé.
+//   reward  : au bout de la piste, une banane à la place de l'anneau plein (public/banane.svg).
+//             Une seule par page : c'est la récompense, pas un décor.
+//   compact : titres et textes plus petits, pour une frise avec beaucoup d'arrêts.
+//
+// Exemple : <Piste stops={[{ label: '01', title: 'Proposer', text: '...' }]} />
+interface Stop {
+  label: string;
+  title: string;
+  text?: string;
+  pause?: boolean;
+}
+
+interface Props {
+  stops: Stop[];
+  open?: boolean;
+  reward?: boolean;
+  compact?: boolean;
+}
+
+const { stops, open = false, reward = false, compact = false } = Astro.props;
+---
+
+<ol class:list={['piste', { open, reward, compact }]} style={`--count: ${stops.length}`}>
+  {
+    stops.map((stop) => (
+      <li class:list={['stop', { pause: stop.pause }]}>
+        {/* L'apparition au défilement porte sur le texte, pas sur l'arrêt : la ligne ne doit pas bouger. */}
+        <div class="reveal">
+          <span class="label">{stop.label}</span>
+          <h3>{stop.title}</h3>
+          {stop.text && <p>{stop.text}</p>}
+        </div>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .piste {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* ----- Petit écran : la piste descend le long du bord gauche ----- */
+
+  li {
+    padding: 0 0 var(--space-xl) var(--space-xl);
+  }
+
+  li::after {
+    top: 0.2rem;
+    left: 0;
+  }
+
+  /* La ligne part sous l'anneau et rejoint l'arrêt suivant. */
+  li::before {
+    top: calc(0.2rem + var(--piste-ring) + 4px);
+    bottom: -0.2rem;
+    left: calc(var(--piste-ring) / 2 - 2px);
+    width: 4px;
+    background: var(--piste-y);
+  }
+
+  li.pause::before,
+  .piste:not(.open) li:last-child::before {
+    display: none;
+  }
+
+  /* Piste ouverte : après le dernier arrêt, la ligne continue et s'estompe. */
+  .open li:last-child::before {
+    mask-image: linear-gradient(to bottom, #000, transparent);
+  }
+
+  /* Piste fermée : le dernier arrêt est plein, on est arrivé. */
+  .piste:not(.open) li:last-child::after {
+    background: var(--color-accent);
+  }
+
+  /* La banane : plus large que l'anneau, elle reste centrée sur lui. */
+  .piste.reward:not(.open) li:last-child::after {
+    --banana: 2.75rem;
+    top: calc(0.2rem + var(--piste-ring) / 2 - var(--banana) * 0.3);
+    left: calc(var(--piste-ring) / 2 - var(--banana) / 2);
+    width: var(--banana);
+    height: calc(var(--banana) * 0.72);
+    background: url('/banane.svg') center / contain no-repeat;
+    border: 0;
+    border-radius: 0;
+  }
+
+  li:last-child {
+    padding-bottom: 0;
+  }
+
+  .open li:last-child {
+    padding-bottom: var(--space-xl);
+  }
+
+  .label {
+    display: block;
+    margin-bottom: var(--space-xs);
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    letter-spacing: 0.04em;
+  }
+
+  h3 {
+    margin-bottom: var(--space-sm);
+  }
+
+  p {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  .compact h3 {
+    font-size: var(--text-lg);
+  }
+
+  .compact p {
+    font-size: var(--text-sm);
+  }
+
+  /* ----- Grand écran : la piste file de gauche à droite, un arrêt par colonne ----- */
+
+  @media (min-width: 60rem) {
+    .piste {
+      display: grid;
+      grid-template-columns: repeat(var(--count), 1fr);
+    }
+
+    li,
+    li:last-child,
+    .open li:last-child {
+      padding: calc(var(--piste-ring) + var(--space-md)) var(--space-lg) 0 0;
+    }
+
+    li::after {
+      top: 0;
+    }
+
+    .piste.reward:not(.open) li:last-child::after {
+      top: calc(var(--piste-ring) / 2 - var(--banana) * 0.3);
+      left: 0;
+    }
+
+    li::before {
+      top: calc(var(--piste-ring) / 2 - 2px);
+      right: 4px;
+      bottom: auto;
+      left: calc(var(--piste-ring) + 4px);
+      width: auto;
+      height: 4px;
+      background: var(--piste-x);
+    }
+
+    .open li:last-child::before {
+      mask-image: linear-gradient(to right, #000, transparent);
+    }
+  }
+</style>

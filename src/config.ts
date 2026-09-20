@@ -43,6 +43,17 @@ export const ORIGINS = {
   article: 'https://www.dimitrichassignol.fr/articles/babouins',
 };
 
+// Les grandes dates du projet, pour la frise de la page d'accueil.
+// Le récit complet et les sources sont sur la page "À propos" : les deux doivent rester d'accord.
+// `pause` : après cette date, plus aucune contribution jusqu'à la date suivante. Sur la frise, la piste s'interrompt.
+export const MILESTONES = [
+  { label: 'Juin 2024', title: 'La création', text: 'Trois étudiants de BTS SIO lancent le projet dans leur classe.' },
+  { label: 'Juillet 2024', title: 'La première doc', text: "56 des 73 commits du dépôt d'origine datent de ce seul mois." },
+  { label: 'Septembre 2024', title: "Le projet s'ouvre", text: 'Un article le présente et invite à contribuer.' },
+  { label: 'Février 2025', title: 'La dernière contribution', text: 'Puis plus rien. Le dépôt est archivé en mars 2026.', pause: true },
+  { label: '2026', title: 'La reprise', text: 'Une nouvelle promo relance le projet, avec un éditeur en ligne.' },
+];
+
 // Liens du menu (header et footer). `external` : le lien sort du site.
 export const NAV = [
   { label: 'Accueil', href: '/' },
@@ -63,8 +74,6 @@ export const CREDITS = {
 
 // Donne "Dimitri Chassignol, Jordan Digat et Mathis Norel".
 export const FOUNDER_NAMES = new Intl.ListFormat('fr', { type: 'conjunction' }).format(CREDITS.founders);
-
-export const CREDITS_NOTICE = `Projet repris par la promo ${CREDITS.promo} (${CREDITS.lead}). Projet original créé en ${CREDITS.foundedIn} par ${FOUNDER_NAMES}.`;
 
 export const LICENSES = {
   content: {

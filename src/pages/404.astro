@@ -1,8 +1,10 @@
 ---
+import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import Button from '../components/Button.astro';
 import Motif from '../components/Motif.astro';
 import { LINKS } from '../config';
+import mascot from '../assets/mascotte-404.png';
 ---
 
 <Layout
@@ -17,8 +19,16 @@ import { LINKS } from '../config';
     <Motif name="piste" size="60rem" bottom="-2rem" right="-14rem" rotate={6} />
 
     <div class="inner">
-      <p class="kicker">Erreur 404</p>
-      <h1>Cette branche ne mène nulle part</h1>
+      <!-- Comme sur l'accueil : le titre et la mascotte sont posés sur la même ligne.
+           Ici c'est la piste, qui arrive de la gauche et s'arrête sous la mascotte.
+           Elle tient une peau de banane vide : il y avait bien quelque chose au bout, mais c'est déjà mangé. -->
+      <div class="dead-end">
+        <div class="title">
+          <p class="kicker">Erreur 404</p>
+          <h1>Cette branche ne mène nulle part</h1>
+        </div>
+        <Image class="mascot" src={mascot} alt="" widths={[208, 416, 640]} sizes="13rem" loading="eager" />
+      </div>
       <p class="lead">La piste s'arrête ici : la page que tu cherches n'existe pas, ou elle a été déplacée.</p>
 
       <!-- Le vrai message d'erreur de Git quand une branche n'existe pas. -->
@@ -44,6 +54,42 @@ error: pathspec 'page-demandee' did not match any file(s) known to git</code></p
     max-width: var(--width-prose);
     margin-inline: auto;
     padding-inline: var(--space-lg);
+  }
+
+  /* Sur petit écran, la mascotte passe sous le titre, à droite : elle reste posée sur la piste. */
+  .dead-end {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0 var(--space-lg);
+    margin-bottom: var(--space-lg);
+  }
+
+  /* La ligne de points (voir --piste-x dans global.css), qui s'efface vers la gauche.
+     Elle s'arrête un peu avant le bord droit, pour qu'aucun point ne dépasse de l'autre côté de la mascotte. */
+  .dead-end::after {
+    content: '';
+    position: absolute;
+    inset: auto var(--space-lg) 0 0;
+    height: 4px;
+    background: var(--piste-x);
+    mask-image: linear-gradient(to right, transparent, #000 50%);
+  }
+
+  .title {
+    flex: 1 1 16rem;
+    padding-bottom: var(--space-md);
+  }
+
+  /* Au-dessus de la ligne de points : la piste disparaît derrière la mascotte. */
+  .dead-end :global(.mascot) {
+    position: relative;
+    z-index: 1;
+    flex: none;
+    width: clamp(8.5rem, 28vw, 13rem);
+    height: auto;
+    margin-left: auto;
   }
 
   h1 {

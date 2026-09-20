@@ -1,22 +1,18 @@
 ---
 // Bloc de contenu : un filet, un titre, un texte.
-//   step   (optionnel) : numéro d'étape, affiché au-dessus du titre (01, 02...).
 //   layout (optionnel) : "stack" empile titre et texte (par défaut),
 //                        "row" place le titre à gauche et le texte à droite sur grand écran.
+// Pour des étapes numérotées ou des dates, voir Piste.astro.
 interface Props {
   title: string;
-  step?: number;
   layout?: 'stack' | 'row';
 }
 
-const { title, step, layout = 'stack' } = Astro.props;
+const { title, layout = 'stack' } = Astro.props;
 ---
 
 <div class:list={['card', layout]}>
-  <div>
-    {step && <span class="step" aria-hidden="true">{String(step).padStart(2, '0')}</span>}
-    <h3>{title}</h3>
-  </div>
+  <h3>{title}</h3>
   <div class="body"><slot /></div>
 </div>
 
@@ -25,15 +21,6 @@ const { title, step, layout = 'stack' } = Astro.props;
     height: 100%;
     padding-top: var(--space-md);
     border-top: 1px solid var(--color-ink);
-  }
-
-  .step {
-    display: block;
-    margin-bottom: var(--space-sm);
-    color: var(--color-accent);
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    letter-spacing: 0.04em;
   }
 
   h3 {

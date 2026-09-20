@@ -1,0 +1,112 @@
+---
+// Des traces de pas : la troupe est passée par là.
+// Une suite d'empreintes de babouin (la main devant, le pied derrière, un côté puis l'autre),
+// dessinées au trait comme les motifs de fond, mais visibles.
+//
+// Règles à garder :
+//   - seulement dans un vide de la page, jamais derrière du texte ;
+//   - 2 pistes par page au maximum, et rien sur petit écran (il n'y a pas de vide) ;
+//   - couleur d'accent du site, trait fin, pas de remplissage.
+//
+//   steps  : nombre de pas.
+//   width  : longueur de la piste (elle garde ses proportions).
+//   rotate : direction de marche en degrés. 0 = vers la droite, 90 = vers le bas.
+//   top, right, bottom, left : position dans la section, qui doit porter la classe "has-motif".
+//
+// Exemple : <Traces steps={6} width="24rem" rotate={100} top="8rem" right="0" />
+interface Props {
+  steps?: number;
+  width: string;
+  rotate?: number;
+  top?: string;
+  right?: string;
+  bottom?: string;
+  left?: string;
+}
+
+const { steps = 6, width, rotate = 0, top, right, bottom, left } = Astro.props;
+
+// Dans le dessin, la troupe marche vers la droite : un pas tous les STRIDE, de part et d'autre du milieu.
+const STRIDE = 86;
+const MARGIN = 56;
+const HEIGHT = 150;
+const viewBox = `0 0 ${MARGIN * 2 + (steps - 1) * STRIDE} ${HEIGHT}`;
+
+// Un pas : de quel côté du milieu il tombe (-1 en haut, 1 en bas) et où.
+const prints = Array.from({ length: steps }, (_, index) => {
+  const side = index % 2 ? 1 : -1;
+  return { side, x: MARGIN + index * STRIDE, y: HEIGHT / 2 + side * 34 };
+});
+
+// Place une empreinte (dessinée doigts vers le haut, dans une boîte de 100 de large) :
+// tournée vers la droite, un peu ouverte vers l'extérieur, réduite, et retournée si besoin
+// pour que le pouce reste du côté du corps.
+const place = (x: number, y: number, side: number, centerY: number, mirror: boolean) =>
+  `translate(${x} ${y}) rotate(${90 + side * 14}) scale(${mirror ? -0.36 : 0.36} 0.36) translate(-50 ${-centerY})`;
+
+const style = [
+  `width: ${width}`,
+  top && `top: ${top}`,
+  right && `right: ${right}`,
+  bottom && `bottom: ${bottom}`,
+  left && `left: ${left}`,
+  `transform: rotate(${rotate}deg)`,
+]
+  .filter(Boolean)
+  .join('; ');
+---
+
+<svg class="traces" viewBox={viewBox} style={style} aria-hidden="true" focusable="false">
+  {
+    prints.map(({ side, x, y }) => (
+      <>
+        {/* La main, devant. */}
+        <g transform={place(x + 21, y, side, 55, side === 1)}>
+          <path d="M30 72c0-14 9-23 20-23s20 9 20 23c0 17-8 31-20 31s-20-14-20-31Z" />
+          <ellipse cx="27" cy="35" rx="5" ry="13" transform="rotate(-18 27 35)" />
+          <ellipse cx="42" cy="24" rx="5" ry="15" transform="rotate(-6 42 24)" />
+          <ellipse cx="58" cy="24" rx="5" ry="15" transform="rotate(6 58 24)" />
+          <ellipse cx="73" cy="35" rx="5" ry="13" transform="rotate(18 73 35)" />
+          <ellipse cx="86" cy="68" rx="5" ry="11" transform="rotate(62 86 68)" />
+        </g>
+        {/* Le pied, juste derrière. */}
+        <g transform={place(x - 24, y, side, 75, side === -1)}>
+          <path d="M32 72c0-14 8-22 18-22s18 8 18 22c0 12-3 22-5 34-2 13-6 24-13 24s-11-11-13-24c-2-12-5-22-5-34Z" />
+          <ellipse cx="37" cy="33" rx="4.5" ry="11" transform="rotate(-10 37 33)" />
+          <ellipse cx="49" cy="28" rx="4.5" ry="12" />
+          <ellipse cx="61" cy="30" rx="4.5" ry="11" transform="rotate(8 61 30)" />
+          <ellipse cx="72" cy="38" rx="4.5" ry="10" transform="rotate(18 72 38)" />
+          <ellipse cx="17" cy="62" rx="5" ry="12" transform="rotate(-58 17 62)" />
+        </g>
+      </>
+    ))
+  }
+</svg>
+
+<style>
+  .traces {
+    display: none;
+  }
+
+  @media (min-width: 64rem) {
+    .traces {
+      position: absolute;
+      z-index: -1;
+      display: block;
+      max-width: none;
+      height: auto;
+      color: var(--color-accent);
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.1;
+      opacity: 0.4;
+      pointer-events: none;
+      /* Les premières empreintes sont les plus anciennes : elles s'effacent. */
+      mask-image: linear-gradient(to right, transparent, #000 45%);
+    }
+  }
+
+  .traces * {
+    vector-effect: non-scaling-stroke;
+  }
+</style>

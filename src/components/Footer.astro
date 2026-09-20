@@ -1,8 +1,12 @@
 ---
+import Troupe from './Troupe.astro';
 import { CREDITS, LICENSES, LINKS, NAV, SITE } from '../config';
 
 const internalLinks = NAV.filter((item) => !item.external);
 ---
+
+<!-- La troupe marche sur le filet du haut du footer, sur toutes les pages. -->
+<Troupe />
 
 <footer class="site-footer">
   <div class="container columns">

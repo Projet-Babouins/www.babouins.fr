@@ -4,9 +4,12 @@ import Layout from '../layouts/Layout.astro';
 import Button from '../components/Button.astro';
 import Card from '../components/Card.astro';
 import Motif from '../components/Motif.astro';
-import { CREDITS, CREDITS_NOTICE, LINKS, SITE } from '../config';
+import Piste from '../components/Piste.astro';
+import Traces from '../components/Traces.astro';
+import { CREDITS, LINKS, MILESTONES, SITE } from '../config';
 import docsLight from '../assets/docs-clair.png';
 import docsDark from '../assets/docs-sombre.png';
+import mascot from '../assets/mascotte.png';
 
 // Largeur affichée de la capture du hero : une colonne sur grand écran, tout l'écran sinon.
 const shotSizes = '(min-width: 60rem) 34rem, 100vw';
@@ -25,6 +28,30 @@ const gitCommands = guide
 
 // Le nombre de lignes du fichier que tu es en train de lire.
 const pageLineCount = pageSource.trimEnd().split('\n').length;
+
+// Le parcours d'une page, de l'idée à la mise en ligne (section "Comment ça marche").
+const steps = [
+  {
+    label: '01',
+    title: 'Proposer',
+    text: "Tu écris ou tu corriges une page, depuis l'éditeur du site ou avec Git. Dans les deux cas, elle part en relecture.",
+  },
+  {
+    label: '02',
+    title: 'Relire',
+    text: 'Les autres membres de la classe lisent ta proposition, commentent et suggèrent des corrections.',
+  },
+  {
+    label: '03',
+    title: 'Valider à 2',
+    text: `Il faut 2 validations pour publier : la règle date du projet d'origine, en ${CREDITS.foundedIn}. Les référents du projet peuvent publier directement quand il faut aller vite.`,
+  },
+  {
+    label: '04',
+    title: 'Déploiement automatique',
+    text: "La page validée est mise en ligne toute seule, en quelques minutes. Les lecteurs qui l'avaient ouverte la voient se mettre à jour sans recharger.",
+  },
+];
 ---
 
 <Layout>
@@ -32,41 +59,54 @@ const pageLineCount = pageSource.trimEnd().split('\n').length;
     Chaque section de cette page a volontairement une forme différente
     (deux colonnes inégales, colonne étroite, grand panneau, bande pleine largeur, carte décalée...).
     Si tu ajoutes une section, évite de recopier la forme de sa voisine.
-  -->
 
-  <!-- 1. Hero : deux colonnes inégales. D'abord lire la doc (texte + vraie capture), ensuite contribuer. -->
-  <section class="hero has-motif">
+    Ce qui les relie : la piste. Sur grand écran, une ligne de points descend dans la marge de gauche,
+    avec un anneau en face de chaque titre (classe "stop" sur la section, voir la fin des styles).
+  -->
+  <div class="trail">
+
+  <!-- 1. Hero : le nom du site et la mascotte posés sur un filet, puis deux colonnes inégales (texte + vraie capture). -->
+  <section class="hero has-motif stop">
     <Motif name="main" size="30rem" top="-5rem" right="-7rem" rotate={-24} />
     <Motif name="piste" size="72rem" bottom="-3rem" left="-12rem" rotate={-4} />
 
-    <div class="container hero-inner">
-      <div>
+    <div class="container">
+      <!-- Le nom et la mascotte sont posés sur le même sol : le filet. La mascotte a la hauteur d'une lettre. -->
+      <div class="hero-head">
         <h1>{SITE.name}</h1>
-        <p class="tagline">{SITE.tagline}</p>
-        <p class="pitch">
-          Procédures, commandes et aide-mémoire, rangés par thème et lisibles sans compte. Une page manque ou contient une erreur ? Tu peux l'écrire ou la corriger, depuis l'éditeur en ligne ou avec Git.
-        </p>
-        <div class="button-row">
-          <Button href={LINKS.docs}>Lire la documentation</Button>
-          <Button href="/contribuer/" variant="secondary">Contribuer</Button>
-        </div>
+        <Image class="mascot" src={mascot} alt="" widths={[120, 240, 400]} sizes="(min-width: 70rem) 12.5rem, 19vw" loading="eager" />
       </div>
 
-      <!-- Une vraie capture de la doc, une par thème. Pour la refaire : voir le README. -->
-      <figure class="shot">
-        <a href={LINKS.docs} aria-label="Ouvrir la documentation : docs.babouins.fr">
-          <Image class="shot-light" src={docsLight} alt="" widths={[440, 880, 1760]} sizes={shotSizes} />
-          <Image class="shot-dark" src={docsDark} alt="" widths={[440, 880, 1760]} sizes={shotSizes} />
-        </a>
-        <figcaption>
-          Capture de docs.babouins.fr, avec des pages de démonstration. La documentation se range par thème : réseaux, systèmes, développement.
-        </figcaption>
-      </figure>
+      <div class="hero-inner">
+        <div>
+          <p class="tagline">{SITE.tagline}</p>
+          <p class="pitch">
+            Procédures, commandes et aide-mémoire, rangés par thème et lisibles sans compte. Une page manque ou contient une erreur ? Tu peux l'écrire ou la corriger, depuis l'éditeur en ligne ou avec Git.
+          </p>
+          <div class="button-row">
+            <Button href={LINKS.docs}>Lire la documentation</Button>
+            <Button href="/contribuer/" variant="secondary">Contribuer</Button>
+          </div>
+        </div>
+
+        <!-- Une vraie capture de la doc, une par thème. Pour la refaire : voir le README. -->
+        <figure class="shot">
+          <a href={LINKS.docs} aria-label="Ouvrir la documentation : docs.babouins.fr">
+            <Image class="shot-light" src={docsLight} alt="" widths={[440, 880, 1760]} sizes={shotSizes} />
+            <Image class="shot-dark" src={docsDark} alt="" widths={[440, 880, 1760]} sizes={shotSizes} />
+          </a>
+          <figcaption>
+            Capture de docs.babouins.fr, avec des pages de démonstration. La documentation se range par thème : réseaux, systèmes, développement.
+          </figcaption>
+        </figure>
+      </div>
     </div>
   </section>
 
   <!-- 2. Le concept : une colonne étroite, calée à gauche, sans grille. -->
-  <section class="concept" aria-labelledby="concept">
+  <section class="concept has-motif stop" aria-labelledby="concept">
+    <Traces steps={6} width="32rem" rotate={96} top="14rem" right="calc(50% - 46rem)" />
+
     <div class="container">
       <div class="concept-inner">
         <h2 id="concept">Le concept</h2>
@@ -92,7 +132,7 @@ const pageLineCount = pageSource.trimEnd().split('\n').length;
   </section>
 
   <!-- 3. Deux façons d'écrire : un grand panneau coupé en deux. -->
-  <section class="ways" aria-labelledby="facons">
+  <section class="ways stop" aria-labelledby="facons">
     <div class="container">
       <h2 id="facons">Deux façons d'écrire, une seule relecture</h2>
 
@@ -123,8 +163,8 @@ const pageLineCount = pageSource.trimEnd().split('\n').length;
     </div>
   </section>
 
-  <!-- 4. Comment ça marche : une bande sombre sur toute la largeur, quatre colonnes. -->
-  <section class="steps has-motif" aria-labelledby="fonctionnement">
+  <!-- 4. Comment ça marche : une bande sombre sur toute la largeur, quatre arrêts sur une piste. -->
+  <section class="steps has-motif stop" aria-labelledby="fonctionnement">
     <Motif name="pied" size="16rem" top="2rem" right="6%" rotate={28} />
     <Motif name="pied" size="16rem" bottom="-4rem" right="22%" rotate={14} />
     <Motif name="queue" size="22rem" bottom="-6rem" left="-4rem" rotate={-8} />
@@ -132,37 +172,17 @@ const pageLineCount = pageSource.trimEnd().split('\n').length;
     <div class="container">
       <div class="steps-head">
         <h2 id="fonctionnement">Comment ça marche</h2>
-        <p class="kicker">4 étapes, 2 validations, 2 façons d'écrire</p>
+        <p class="kicker">{steps.length} étapes, 2 validations, 2 façons d'écrire</p>
       </div>
 
-      <ol class="steps-list">
-        <li class="reveal">
-          <Card title="Proposer" step={1}>
-            <p>Tu écris ou tu corriges une page, depuis l'éditeur du site ou avec Git. Dans les deux cas, elle part en relecture.</p>
-          </Card>
-        </li>
-        <li class="reveal">
-          <Card title="Relire" step={2}>
-            <p>Les autres membres de la classe lisent ta proposition, commentent et suggèrent des corrections.</p>
-          </Card>
-        </li>
-        <li class="reveal">
-          <Card title="Valider à 2" step={3}>
-            <p>Il faut 2 validations pour publier : la règle date du projet d'origine, en {CREDITS.foundedIn}. Les référents du projet peuvent publier directement quand il faut aller vite.</p>
-          </Card>
-        </li>
-        <li class="reveal">
-          <Card title="Déploiement automatique" step={4}>
-            <p>La page validée est mise en ligne toute seule, en quelques minutes. Les lecteurs qui l'avaient ouverte la voient se mettre à jour sans recharger.</p>
-          </Card>
-        </li>
-      </ol>
+      <Piste stops={steps} reward />
     </div>
   </section>
 
   <!-- 5. Modifier cette page : une carte plus étroite que le reste, décalée sur le côté. -->
-  <section class="edit has-motif" aria-labelledby="modifier">
+  <section class="edit has-motif stop" aria-labelledby="modifier">
     <Motif name="main" size="24rem" bottom="-6rem" left="-5rem" rotate={18} />
+    <Traces steps={4} width="22rem" rotate={-6} top="8rem" left="calc(50% - 33.5rem)" />
 
     <div class="container">
       <div class="edit-card reveal">
@@ -179,7 +199,7 @@ const pageLineCount = pageSource.trimEnd().split('\n').length;
   </section>
 
   <!-- 6. Les limites : du texte seul, et un avertissement mis en avant. -->
-  <section class="limits" aria-labelledby="limites">
+  <section class="limits stop" aria-labelledby="limites">
     <div class="limits-inner">
       <h2 id="limites">Jusqu'où va Babouins</h2>
       <p>
@@ -197,23 +217,49 @@ const pageLineCount = pageSource.trimEnd().split('\n').length;
     </div>
   </section>
 
-  <!-- 7. La reprise du projet : une simple ligne. -->
-  <div class="credits">
-    <p class="container">{CREDITS_NOTICE} <a href="/a-propos/">En savoir plus</a></p>
+  <!-- 7. L'histoire du projet : une frise. La piste s'interrompt là où le projet s'est arrêté, pour de vrai. -->
+  <section class="history stop" aria-labelledby="histoire">
+    <div class="container">
+      <h2 id="histoire">Créé en {CREDITS.foundedIn}, repris en 2026</h2>
+      <Piste stops={MILESTONES} open compact />
+    </div>
+  </section>
+
   </div>
 </Layout>
 
 <style>
   /* ----- 1. Hero ----- */
 
+  /* Le premier arrêt de la piste est à la hauteur du filet : la mascotte (1,04 fois --text-hero) fixe cette hauteur. */
   .hero {
-    padding-block: var(--space-3xl) var(--space-2xl);
+    --stop: calc(var(--space-2xl) + var(--text-hero) * 1.04);
+    padding-block: var(--space-2xl);
   }
 
+  /* Le nom à gauche, la mascotte à droite, tous les deux posés sur le filet à l'encre. */
+  .hero-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--color-ink);
+  }
+
+  /* Aussi haute qu'une lettre du nom : elle suit --text-hero. */
+  .hero-head :global(.mascot) {
+    display: block;
+    flex: none;
+    width: calc(var(--text-hero) * 1.04);
+    height: auto;
+  }
+
+  /* Sous le filet : les deux colonnes. */
   .hero-inner {
     display: grid;
-    gap: var(--space-2xl);
-    align-items: end;
+    gap: var(--space-xl) var(--space-2xl);
+    align-items: start;
+    padding-top: var(--space-xl);
   }
 
   /* Sans ça, un contenu qui ne se coupe pas élargirait la colonne au-delà de l'écran. */
@@ -221,11 +267,15 @@ const pageLineCount = pageSource.trimEnd().split('\n').length;
     min-width: 0;
   }
 
+  /*
+    Le nom du site, en très grand. La marge de gauche cale le bord du B sur celui du texte,
+    celle du bas pose les lettres sur le filet (elles n'ont pas de jambage).
+  */
   h1 {
-    margin-bottom: var(--space-md);
+    margin: 0 0 -0.035em -0.045em;
     font-size: var(--text-hero);
-    line-height: 0.95;
-    letter-spacing: -0.045em;
+    line-height: 0.8;
+    letter-spacing: -0.05em;
   }
 
   .tagline {
@@ -297,6 +347,7 @@ const pageLineCount = pageSource.trimEnd().split('\n').length;
   /* ----- 2. Le concept ----- */
 
   .concept {
+    --stop: calc(var(--space-2xl) + var(--text-2xl) * 0.55);
     padding-block: var(--space-2xl) var(--space-xl);
   }
 
@@ -321,6 +372,7 @@ const pageLineCount = pageSource.trimEnd().split('\n').length;
   /* ----- 3. Deux façons d'écrire ----- */
 
   .ways {
+    --stop: calc(var(--space-xl) + var(--text-2xl) * 0.55);
     padding-block: var(--space-xl) var(--space-2xl);
   }
 
@@ -386,6 +438,8 @@ const pageLineCount = pageSource.trimEnd().split('\n').length;
 
   /* Bande toujours sombre : on y force les couleurs du mode sombre. */
   .steps {
+    --stop: calc(var(--space-3xl) + var(--text-2xl) * 0.55);
+    --piste-bg: var(--color-bg-alt);
     color-scheme: dark;
     padding-block: var(--space-3xl);
     background: var(--color-bg-alt);
@@ -407,17 +461,11 @@ const pageLineCount = pageSource.trimEnd().split('\n').length;
     margin: 0;
   }
 
-  .steps-list {
-    display: grid;
-    gap: var(--space-xl) var(--space-lg);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
   /* ----- 5. Modifier cette page ----- */
 
   .edit {
+    /* Le titre est dans la carte : marge de la section + bordure + marge intérieure de la carte. */
+    --stop: calc(var(--space-2xl) + 1px + var(--space-xl) + var(--text-2xl) * 0.55);
     padding-block: var(--space-2xl) var(--space-3xl);
   }
 
@@ -442,6 +490,8 @@ const pageLineCount = pageSource.trimEnd().split('\n').length;
   /* ----- 6. Les limites ----- */
 
   .limits {
+    --stop: calc(var(--space-2xl) + var(--text-2xl) * 0.55);
+    --piste-bg: var(--color-bg-alt);
     padding-block: var(--space-2xl);
     background: var(--color-bg-alt);
     border-top: var(--rule);
@@ -461,26 +511,35 @@ const pageLineCount = pageSource.trimEnd().split('\n').length;
     border-radius: 0 var(--radius) var(--radius) 0;
   }
 
-  /* ----- 7. La reprise ----- */
+  /* ----- 7. L'histoire ----- */
 
-  .credits {
-    padding-block: var(--space-lg);
+  .history {
+    --stop: calc(var(--space-2xl) + var(--text-2xl) * 0.55);
+    /* Peu de marge en bas : la troupe du footer arrive juste après. */
+    padding-block: var(--space-2xl) var(--space-lg);
     border-top: var(--rule);
-    color: var(--color-text-muted);
-    font-size: var(--text-sm);
   }
 
-  .credits p {
-    margin-bottom: 0;
+  .history h2 {
+    margin-bottom: var(--space-xl);
+  }
+
+  /* ----- La piste qui relie les sections ----- */
+
+  /*
+    Chaque section "stop" dessine son morceau de ligne (::before) et son anneau (::after, voir
+    .stop dans global.css). --stop est la distance entre le haut de la section et le milieu de
+    son titre : si tu changes la marge haute d'une section, change aussi son --stop.
+    Rien de tout ça sur petit écran : il n'y a pas de marge où faire passer la piste.
+  */
+  .trail > .stop::before,
+  .trail > .stop::after {
+    display: none;
   }
 
   /* ----- Écrans plus larges ----- */
 
   @media (min-width: 36rem) {
-    .steps-list {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
     .edit-card,
     .pane {
       padding: var(--space-xl);
@@ -495,9 +554,40 @@ const pageLineCount = pageSource.trimEnd().split('\n').length;
     .split {
       grid-template-columns: 1.2fr 1fr;
     }
+  }
 
-    .steps-list {
-      grid-template-columns: repeat(4, 1fr);
+  @media (min-width: 78rem) {
+    .trail {
+      /* La piste passe 3rem à gauche du contenu. */
+      --rail: calc(50% - var(--width-content) / 2 - 1.5rem);
+    }
+
+    .trail > .stop::before,
+    .trail > .stop::after {
+      display: block;
+    }
+
+    .trail > .stop::before {
+      top: 0;
+      bottom: 0;
+      left: var(--rail);
+      width: 4px;
+      background: var(--piste-y);
+    }
+
+    .trail > .stop::after {
+      top: calc(var(--stop) - var(--piste-ring) / 2);
+      left: calc(var(--rail) + 2px - var(--piste-ring) / 2);
+    }
+
+    /* La piste commence au premier arrêt, en haut du hero. */
+    .trail > .hero::before {
+      top: var(--stop);
+    }
+
+    /* Et elle ne s'arrête pas : après le dernier arrêt, elle s'estompe. */
+    .trail > .history::before {
+      mask-image: linear-gradient(to bottom, #000 40%, transparent);
     }
   }
 </style>

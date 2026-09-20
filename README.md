@@ -109,19 +109,25 @@ Le site est fait avec [Astro](https://astro.build) : du HTML, du CSS, et presque
 │   └── workflows/
 │       └── check.yml     Vérifie que le site se construit, sur chaque PR
 ├── public/               Fichiers copiés tels quels dans le site
+│   ├── banane.svg        La banane au bout de la piste des étapes
 │   ├── favicon.png       Logo du site et icône de l'onglet
 │   └── robots.txt        Indications pour les moteurs de recherche
 ├── src/
 │   ├── assets/           Images optimisées par Astro au build
 │   │   ├── docs-clair.png      Capture de la doc affichée sur l'accueil, thème clair
-│   │   └── docs-sombre.png     La même, thème sombre
+│   │   ├── docs-sombre.png     La même, thème sombre
+│   │   ├── mascotte.png        La mascotte en grand (accueil). Le petit logo est public/favicon.png
+│   │   └── mascotte-404.png    La mascotte qui réfléchit, une peau de banane vide à la main (page 404)
 │   ├── components/       Briques réutilisables
 │   │   ├── Button.astro        Lien en forme de bouton
-│   │   ├── Card.astro          Bloc de contenu (titre, texte, numéro d'étape optionnel)
+│   │   ├── Card.astro          Bloc de contenu (un filet, un titre, un texte)
 │   │   ├── Footer.astro        Pied de page
 │   │   ├── Header.astro        En-tête et menu
 │   │   ├── Motif.astro         Motifs de fond (empreintes, piste), presque invisibles
-│   │   └── ThemeToggle.astro   Bouton thème clair ou sombre (seul JavaScript du site)
+│   │   ├── Piste.astro         Suite d'arrêts reliés par une ligne de points (étapes, dates)
+│   │   ├── ThemeToggle.astro   Bouton thème clair ou sombre (seul JavaScript du site)
+│   │   ├── Traces.astro        Traces de pas de babouin, visibles, dans les vides de la page
+│   │   └── Troupe.astro        La troupe en marche sur le filet du footer (silhouettes)
 │   ├── layouts/
 │   │   └── Layout.astro  Squelette commun à toutes les pages (head, header, footer)
 │   ├── pages/            Un fichier = une page du site
@@ -131,7 +137,7 @@ Le site est fait avec [Astro](https://astro.build) : du HTML, du CSS, et presque
 │   │   └── 404.astro           Page d'erreur
 │   ├── styles/
 │   │   └── global.css    Couleurs, polices, espacements : toutes les variables CSS sont ici
-│   └── config.ts         Infos du projet et liens (docs, GitHub, Discussions), à un seul endroit
+│   └── config.ts         Infos du projet, liens et grandes dates, à un seul endroit
 ├── astro.config.mjs      Configuration d'Astro
 └── package.json          Dépendances et commandes npm
 ```
@@ -152,7 +158,11 @@ Pour que le site ne ressemble pas à un modèle tout fait, la page d'accueil sui
 - **Lire d'abord, écrire ensuite** : le haut de l'accueil montre la doc (une vraie capture, qui mène à docs.babouins.fr), puis propose de contribuer.
 - **Des preuves réelles plutôt que des illustrations** : les commandes Git et le nombre de lignes affichés sur l'accueil sont lus dans les vrais fichiers du dépôt au moment du build, et l'image du haut de page est une capture de la doc, pas un dessin.
 - **Deux façons d'écrire, à égalité** : l'éditeur en ligne de la doc d'abord (le plus simple), Git et GitHub ensuite (pour qui veut). Le site ne doit jamais laisser croire qu'il faut connaître Git pour contribuer.
-- **Une seule idée visuelle : la piste de la troupe.** Les motifs de fond (`Motif.astro`) sont des empreintes et une piste, au trait, presque invisibles. Pas d'autre décoration.
+- **Une seule idée visuelle : la piste de la troupe.** Une ligne de points dans la couleur d'accent, un anneau à chaque arrêt. Elle relie les sections de l'accueil (dans la marge, sur grand écran), les étapes et les dates du projet (`Piste.astro`), la frise de la page À propos et la page 404. Là où le projet s'est arrêté, en 2025, la ligne s'interrompt vraiment. Les variables `--piste-*` et la classe `.stop` sont dans `global.css`. Les motifs de fond (`Motif.astro`) sont des empreintes au trait, presque invisibles. Pas d'autre décoration.
+- **Le babouin se voit** : en haut de l'accueil, le nom du site et la mascotte sont posés sur le même filet, et la mascotte a la hauteur d'une lettre (tout suit `--text-hero`). C'est le seul grand geste et la seule image en couleur : le reste reste calme. Pour ne pas voir le nom et la mascotte deux fois, le logo du header reste caché sur l'accueil tant qu'on n'a pas défilé (`.on-home` dans `Header.astro`). Sur grand écran, des traces de pas (`Traces.astro`, main devant, pied derrière) traversent les vides de la page : 2 pistes au maximum, jamais derrière du texte. Sur la page 404, même principe que sur l'accueil : le titre et la mascotte (`mascotte-404.png`) sont posés sur la piste, qui s'arrête derrière elle.
+- **La troupe ferme la marche** : sur toutes les pages, cinq babouins en silhouette marchent sur le filet du haut du footer (`Troupe.astro`). Ce qui les rend reconnaissables est noté en tête du fichier : queue qui monte puis retombe, tête basse à long museau, crinière du mâle, pattes fines. Une seule couleur, aucun détail.
+- **Une banane, pas un régime** : la piste des étapes mène à une banane (`public/banane.svg`, option `reward` de `Piste.astro`), et le texte sélectionné à la souris passe au jaune banane. Sur la page 404, il ne reste que la peau, vide, dans la main de la mascotte. C'est tout : une seule banane visible par page.
+- **Le babouin ne parle pas** : l'identité passe par l'image, pas par des blagues dans les textes.
 - **Un texte précis et honnête** : des chiffres vérifiables, et une section qui dit clairement jusqu'où va le projet.
 - **Sobre** : une seule couleur d'accent, des filets fins, pas d'ombres ni d'éléments penchés.
 

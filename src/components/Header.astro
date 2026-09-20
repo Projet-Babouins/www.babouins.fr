@@ -5,11 +5,15 @@ import { NAV, SITE } from '../config';
 // Chemin de la page affichée, sans le "/" final, pour repérer le lien actif du menu.
 const withoutTrailingSlash = (path: string) => path.replace(/\/$/, '') || '/';
 const currentPath = withoutTrailingSlash(Astro.url.pathname);
+
+// Sur l'accueil, le haut de page affiche déjà le nom et la mascotte en grand :
+// le logo du header reste caché tant qu'on n'a pas défilé (voir .on-home dans les styles).
+const isHome = currentPath === '/';
 ---
 
 <header class="site-header">
   <div class="container inner">
-    <a href="/" class="brand">
+    <a href="/" class:list={['brand', { 'on-home': isHome }]}>
       <img src={SITE.logo} alt="" width="40" height="40" />
       <span>{SITE.name}</span>
     </a>
@@ -76,6 +80,36 @@ const currentPath = withoutTrailingSlash(Astro.url.pathname);
 
   .brand img {
     display: block;
+  }
+
+  /*
+    Accueil : pas de logo tant que le grand nom est à l'écran, sinon on le voit deux fois.
+    Il apparaît quand on défile (CSS pur). Là où le navigateur ne sait pas le faire,
+    il reste caché sur l'accueil : le lien "Accueil" du menu fait le même travail.
+    `visibility` (et pas seulement l'opacité) : caché, le lien ne prend pas le focus clavier.
+  */
+  .brand.on-home {
+    visibility: hidden;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    .brand.on-home {
+      animation: brand-in linear both;
+      animation-timeline: scroll();
+      animation-range: 10rem 18rem;
+    }
+
+    @keyframes brand-in {
+      from {
+        visibility: hidden;
+        opacity: 0;
+      }
+
+      to {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
   }
 
   /* ----- Mobile : menu replié, ouvert par la case à cocher ----- */
