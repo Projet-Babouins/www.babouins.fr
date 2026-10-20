@@ -25,6 +25,8 @@ const REPO = `${ORGANIZATION}/www.babouins.fr`;
 
 export const LINKS = {
   docs: 'https://docs.babouins.fr',
+  // Le forum : questions et échanges, reliés aux pages de la doc.
+  forum: 'https://forum.babouins.fr',
   // L'éditeur en ligne de la doc : pour écrire une page sans connaître Git.
   editor: 'https://docs.babouins.fr/admin',
   // Le dépôt de la doc : pour écrire une page avec Git et GitHub.
@@ -60,6 +62,7 @@ export const NAV = [
   { label: 'Contribuer', href: '/contribuer/' },
   { label: 'À propos', href: '/a-propos/' },
   { label: 'Docs', href: LINKS.docs, external: true },
+  { label: 'Forum', href: LINKS.forum, external: true },
   { label: 'GitHub', href: LINKS.organization, external: true },
 ];
 
