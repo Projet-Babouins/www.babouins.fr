@@ -9,6 +9,7 @@ Bienvenue sur le dépôt de [www.babouins.fr](https://www.babouins.fr), la vitri
 | [www.babouins.fr](https://www.babouins.fr) | Ce dépôt : la vitrine, le concept, le guide de contribution |
 | [docs.babouins.fr](https://docs.babouins.fr) | La documentation (projet séparé) |
 | [docs.babouins.fr/admin](https://docs.babouins.fr/admin) | L'éditeur en ligne de la doc : écrire une page sans connaître Git |
+| [forum.babouins.fr](https://forum.babouins.fr) | Le forum : questions et échanges, reliés aux pages de la doc (projet séparé) |
 | [GitHub Discussions](https://github.com/Projet-Babouins/www.babouins.fr/discussions) | Les échanges entre contributeurs |
 
 ### 📚 Concept du projet
